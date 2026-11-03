@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('name', 100);
             $table->enum('type', ['expense', 'income']);
-            $table->string('color', 7)->default('#64748B');
+            $table->string('color', 7)->default('#64748b');
 
             $table->timestamps();
 

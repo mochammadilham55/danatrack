@@ -35,7 +35,7 @@ class CategoryController extends Controller
                     ->where('type', $request->type),
             ],
             'type' => ['required', Rule::in(['expense', 'income'])],
-            'color' => ['nullable', 'string', 'max:20'],
+            'color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9a-fA-F]{6}$/'],
         ]);
 
         Category::create([
@@ -72,7 +72,7 @@ class CategoryController extends Controller
                     ->ignore($category->id),
             ],
             'type' => ['required', Rule::in(['expense', 'income'])],
-            'color' => ['nullable', 'string', 'max:20'],
+            'color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9a-fA-F]{6}$/'],
         ]);
 
         $category->update([

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
@@ -136,12 +137,10 @@ class TransactionController extends Controller
             ->where('type', $type)
             ->first();
 
-        if (!$category) {
-            abort(
-                response()->json([
-                    'message' => 'Kategori tidak valid atau tidak sesuai jenis transaksi.',
-                ], 422)
-            );
+        if (! $category) {
+            throw ValidationException::withMessages([
+                'category_id' => 'Kategori tidak valid atau tidak sesuai jenis transaksi.',
+            ]);
         }
     }
 }
