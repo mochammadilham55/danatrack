@@ -93,10 +93,27 @@ Setelah restart, ulangi:
 
 ## 5. Status fitur ini
 
-- [x] Endpoint `POST /webhooks/email-transactions` (Laravel) -- sudah ada, teruji.
-- [x] Endpoint `POST /webhooks/telegram` (Laravel) -- sudah ada, teruji.
+- [x] Endpoint `POST /webhooks/email-transactions` (Laravel) -- sudah ada, teruji end-to-end lewat ngrok.
+- [x] Endpoint `POST /webhooks/telegram` (Laravel) -- sudah ada, teruji end-to-end: klik tombol Tolak sungguhan di HP berhasil menghapus transaksi uji lewat tunnel ngrok.
 - [x] Baris `telegram_users` penghubung akun Anda sudah dibuat.
-- [ ] Format regex `parseEmailBri_()` di GAS -- **masih placeholder**,
-      perlu contoh email asli untuk difinalisasi.
-- [ ] ngrok authtoken -- perlu disiapkan manual oleh Anda.
-- [ ] `setWebhook` Telegram -- jalankan setelah ngrok aktif.
+- [x] Parser `parseEmailBri_()` di GAS -- sudah disusun dari 7 contoh
+      email BRImo asli (QRIS Bayar, QRIS Tampil, BRIVA, Transfer
+      BI-FAST, Transfer Bank BRI, top-up DANA, top-up ShopeePay) dan
+      diverifikasi lewat skrip Node terpisah, bukan lagi placeholder.
+- [x] ngrok authtoken -- sudah dikonfigurasi.
+- [x] `setWebhook` Telegram -- sudah didaftarkan dan diverifikasi.
+- [ ] **Deteksi transfer MASUK (`type: income`) belum teruji** -- ke-7
+      contoh yang ada semuanya transaksi keluar. Begitu ada contoh
+      email transfer masuk, sesuaikan `KATA_KUNCI_MASUK` di
+      `EmailWatcher.gs`.
+- [ ] **Alamat pengirim ("From:") email BRI belum dipastikan** --
+      `GMAIL_SEARCH_QUERY` masih pakai filter domain `bri.co.id` +
+      potongan kalimat body. Kalau tahu alamat "From:" pasti, kabari
+      untuk mempersempit query.
+- [ ] GAS belum di-deploy ke akun Google Anda -- langkah 1-4 di
+      `EmailWatcher.gs` masih manual, harus dilakukan dari akun Anda.
+- [ ] ngrok free tier: URL berubah tiap restart proses ngrok. Server
+      `php artisan serve` + tunnel ngrok yang aktif sekarang berjalan
+      di sesi terminal ini saja -- untuk pemakaian jangka panjang,
+      jalankan sendiri di terminal yang tetap terbuka (atau pertimbangkan
+      static domain ngrok, atau deploy ke hosting sungguhan nantinya).
