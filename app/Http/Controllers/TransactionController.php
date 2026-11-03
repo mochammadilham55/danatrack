@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -33,7 +34,7 @@ class TransactionController extends Controller
         return view('transactions.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, TelegramService $telegramService)
     {
         $validated = $request->validate([
             'transaction_date' => ['required', 'date'],
@@ -49,7 +50,7 @@ class TransactionController extends Controller
             $validated['type']
         );
 
-        Transaction::create([
+        $transaction = Transaction::create([
             'user_id' => auth()->id(),
             'category_id' => $validated['category_id'] ?? null,
             'transaction_date' => $validated['transaction_date'],
@@ -62,6 +63,11 @@ class TransactionController extends Controller
             'approved_by' => auth()->id(),
             'approved_at' => now(),
         ]);
+
+        // Transaksi tetap tersimpan meskipun notifikasi Telegram gagal
+        // (lihat TelegramService::sendMessage()) -- kegagalan hanya dicatat
+        // ke log, tidak membatalkan transaksi yang sudah berhasil dibuat.
+        $telegramService->sendTransactionCreated($transaction);
 
         return redirect()
             ->route('transactions.index')
