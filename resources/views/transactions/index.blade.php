@@ -21,6 +21,18 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-md">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($jumlahMenunggu > 0)
+                <div class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-md">
+                    Anda memiliki {{ $jumlahMenunggu }} transaksi yang menunggu persetujuan.
+                </div>
+            @endif
+
             <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                 <div class="p-6">
                     @if ($transactions->isEmpty())
@@ -37,6 +49,7 @@
                                         <th class="px-4 py-3">Kategori</th>
                                         <th class="px-4 py-3">Jenis</th>
                                         <th class="px-4 py-3">Nominal</th>
+                                        <th class="px-4 py-3">Status</th>
                                         <th class="px-4 py-3">Aksi</th>
                                     </tr>
                                 </thead>
@@ -76,8 +89,32 @@
                                                 Rp{{ number_format((float) $transaction->amount, 0, ',', '.') }}
                                             </td>
 
+                                            <td class="px-4 py-3 whitespace-nowrap">
+                                                @if ($transaction->status === 'pending')
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">
+                                                        Menunggu
+                                                    </span>
+                                                @else
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                                                        Disetujui
+                                                    </span>
+                                                @endif
+                                            </td>
+
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center gap-3">
+                                                    @if ($transaction->status === 'pending')
+                                                        <form action="{{ route('transactions.approve', $transaction) }}"
+                                                              method="POST">
+                                                            @csrf
+
+                                                            <button type="submit"
+                                                                    class="text-green-600 hover:underline">
+                                                                Setujui
+                                                            </button>
+                                                        </form>
+                                                    @endif
+
                                                     <a href="{{ route('transactions.edit', $transaction) }}"
                                                        class="text-indigo-600 hover:underline">
                                                         Edit
@@ -85,13 +122,13 @@
 
                                                     <form action="{{ route('transactions.destroy', $transaction) }}"
                                                           method="POST"
-                                                          onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                                          onsubmit="return confirm('{{ $transaction->status === 'pending' ? 'Yakin ingin menolak transaksi ini?' : 'Yakin ingin menghapus transaksi ini?' }}')">
                                                         @csrf
                                                         @method('DELETE')
 
                                                         <button type="submit"
                                                                 class="text-red-600 hover:underline">
-                                                            Hapus
+                                                            {{ $transaction->status === 'pending' ? 'Tolak' : 'Hapus' }}
                                                         </button>
                                                     </form>
                                                 </div>

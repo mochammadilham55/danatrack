@@ -17,7 +17,11 @@ class TransactionController extends Controller
             ->orderByDesc('transaction_date')
             ->paginate(10);
 
-        return view('transactions.index', compact('transactions'));
+        $jumlahMenunggu = Transaction::where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->count();
+
+        return view('transactions.index', compact('transactions', 'jumlahMenunggu'));
     }
 
     public function create()
@@ -116,6 +120,27 @@ class TransactionController extends Controller
         return redirect()
             ->route('transactions.index')
             ->with('success', 'Transaksi berhasil dihapus.');
+    }
+
+    public function approve(Transaction $transaction)
+    {
+        $this->authorizeTransaction($transaction);
+
+        if ($transaction->status !== 'pending') {
+            return redirect()
+                ->route('transactions.index')
+                ->with('error', 'Transaksi ini sudah diproses sebelumnya.');
+        }
+
+        $transaction->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return redirect()
+            ->route('transactions.index')
+            ->with('success', 'Transaksi berhasil disetujui.');
     }
 
     private function authorizeTransaction(Transaction $transaction): void
