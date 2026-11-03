@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
         ->name('transactions.approve');
     Route::get('/reports', [ReportController::class, 'index'])
         ->name('reports.index');
+    Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])
+        ->name('reports.exportExcel');
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');

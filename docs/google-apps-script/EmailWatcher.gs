@@ -40,7 +40,11 @@
  *   ulang semua field di endpoint webhook.
  */
 
-var GMAIL_SEARCH_QUERY = 'from:bri.co.id ("Berikut detail transaksi kamu di BRImo" OR "informasi transaksi yang telah Anda lakukan di Aplikasi BRImo") -label:DanaTrack/Processed';
+// "after:" membatasi pencarian supaya tidak mundur mengunyah riwayat
+// lama -- backlog historis sudah pernah diimpor manual sekali (lihat
+// docs/telegram-email-integration.md). Naikkan tanggal ini kapan saja
+// kalau mau menggeser titik mulainya.
+var GMAIL_SEARCH_QUERY = 'from:bri.co.id ("Berikut detail transaksi kamu di BRImo" OR "informasi transaksi yang telah Anda lakukan di Aplikasi BRImo") after:2026/11/01 -label:DanaTrack/Processed';
 var PROCESSED_LABEL = 'DanaTrack/Processed';
 
 // Field yang muncul sebagai baris "Label<spasi/tab berlebih>Nilai" di

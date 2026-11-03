@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransactionsExport;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -13,18 +15,7 @@ class ReportController extends Controller
     {
         $userId = $request->user()->id;
 
-        $request->validate([
-            'dari' => ['nullable', 'date'],
-            'sampai' => ['nullable', 'date', 'after_or_equal:dari'],
-        ]);
-
-        $tanggalAwal = $request->input('dari')
-            ? Carbon::parse($request->input('dari'))->startOfDay()
-            : now()->startOfMonth();
-
-        $tanggalAkhir = $request->input('sampai')
-            ? Carbon::parse($request->input('sampai'))->endOfDay()
-            : now()->endOfMonth();
+        [$tanggalAwal, $tanggalAkhir] = $this->resolveRentangTanggal($request);
 
         $transaksi = Transaction::where('user_id', auth()->id())
             ->where('status', 'approved')
@@ -45,7 +36,7 @@ class ReportController extends Controller
             ->where('transactions.status', 'approved')
             ->whereBetween('transactions.transaction_date', [
                 $tanggalAwal,
-                $tanggalAkhir
+                $tanggalAkhir,
             ])
             ->where('transactions.type', 'expense')
             ->leftJoin(
@@ -76,5 +67,50 @@ class ReportController extends Controller
             'rekapKategori',
             'daftarTransaksi'
         ));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        [$tanggalAwal, $tanggalAkhir] = $this->resolveRentangTanggal($request);
+
+        $daftarTransaksi = Transaction::where('user_id', auth()->id())
+            ->where('status', 'approved')
+            ->whereBetween('transaction_date', [$tanggalAwal, $tanggalAkhir])
+            ->with('category')
+            ->orderBy('transaction_date')
+            ->get();
+
+        $namaFile = sprintf(
+            'laporan-danatrack_%s_%s.xlsx',
+            $tanggalAwal->format('Y-m-d'),
+            $tanggalAkhir->format('Y-m-d')
+        );
+
+        return Excel::download(new TransactionsExport($daftarTransaksi), $namaFile);
+    }
+
+    /**
+     * Filter tanggal yang sama dipakai index() dan exportExcel() --
+     * ekspor Excel harus merefleksikan rentang yang sedang ditampilkan
+     * di halaman Laporan.
+     *
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private function resolveRentangTanggal(Request $request): array
+    {
+        $request->validate([
+            'dari' => ['nullable', 'date'],
+            'sampai' => ['nullable', 'date', 'after_or_equal:dari'],
+        ]);
+
+        $tanggalAwal = $request->input('dari')
+            ? Carbon::parse($request->input('dari'))->startOfDay()
+            : now()->startOfMonth();
+
+        $tanggalAkhir = $request->input('sampai')
+            ? Carbon::parse($request->input('sampai'))->endOfDay()
+            : now()->endOfMonth();
+
+        return [$tanggalAwal, $tanggalAkhir];
     }
 }

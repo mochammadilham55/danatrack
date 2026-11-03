@@ -40,6 +40,14 @@
                        class="px-4 py-2 text-gray-600 hover:text-gray-900">
                         Reset
                     </a>
+
+                    <a href="{{ route('reports.exportExcel', [
+                            'dari' => $tanggalAwal->format('Y-m-d'),
+                            'sampai' => $tanggalAkhir->format('Y-m-d'),
+                       ]) }}"
+                       class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 md:ms-auto">
+                        Unduh Excel
+                    </a>
                 </form>
             </div>
 
