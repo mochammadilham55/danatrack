@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Services\TelegramService;
+use App\Services\TransactionApprovalService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -128,7 +129,7 @@ class TransactionController extends Controller
             ->with('success', 'Transaksi berhasil dihapus.');
     }
 
-    public function approve(Transaction $transaction)
+    public function approve(Transaction $transaction, TransactionApprovalService $approvalService)
     {
         $this->authorizeTransaction($transaction);
 
@@ -138,11 +139,7 @@ class TransactionController extends Controller
                 ->with('error', 'Transaksi ini sudah diproses sebelumnya.');
         }
 
-        $transaction->update([
-            'status' => 'approved',
-            'approved_by' => auth()->id(),
-            'approved_at' => now(),
-        ]);
+        $approvalService->approve($transaction, auth()->user());
 
         return redirect()
             ->route('transactions.index')

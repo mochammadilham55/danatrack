@@ -5,11 +5,21 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Webhooks\EmailTransactionWebhookController;
+use App\Http\Controllers\Webhooks\TelegramWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Webhook publik (machine-to-machine): otentikasi pakai shared secret
+// di header, BUKAN sesi/login. Dikecualikan dari CSRF di bootstrap/app.php.
+Route::post('/webhooks/email-transactions', EmailTransactionWebhookController::class)
+    ->name('webhooks.email-transactions');
+
+Route::post('/webhooks/telegram', TelegramWebhookController::class)
+    ->name('webhooks.telegram');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

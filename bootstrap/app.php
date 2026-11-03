@@ -12,7 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Webhook GAS/Telegram diautentikasi dengan shared secret di
+        // header (lihat EmailTransactionWebhookController &
+        // TelegramWebhookController), bukan sesi browser -- caller-nya
+        // tidak punya CSRF token.
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

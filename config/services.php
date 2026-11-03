@@ -38,6 +38,21 @@ return [
     'telegram' => [
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'chat_id' => env('TELEGRAM_CHAT_ID'),
+        // Dicocokkan dengan header X-Telegram-Bot-Api-Secret-Token yang
+        // dikirim Telegram ke webhook kita (diset lewat setWebhook).
+        'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
+    ],
+
+    // Webhook untuk menerima transaksi dari Google Apps Script (pembaca
+    // email notifikasi bank). Endpoint publik, diautentikasi pakai
+    // shared secret di header X-Webhook-Secret -- bukan sesi/login.
+    'email_webhook' => [
+        'secret' => env('EMAIL_WEBHOOK_SECRET'),
+        // ID user DanaTrack pemilik transaksi dari kanal email. Aplikasi
+        // ini single-user untuk saat ini, jadi dikonfigurasi manual
+        // alih-alih ditebak dari isi email (lihat CLAUDE.md: jangan
+        // percaya isi email sebagai data tepercaya).
+        'user_id' => env('EMAIL_WEBHOOK_USER_ID'),
     ],
 
 ];
