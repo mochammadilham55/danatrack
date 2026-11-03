@@ -46,7 +46,11 @@ var PROCESSED_LABEL = 'DanaTrack/Processed';
 // Field yang muncul sebagai baris "Label<spasi/tab berlebih>Nilai" di
 // berbagai template email BRImo. Urutan di sini tidak penting --
 // ekstrakField_ mencocokkan tiap baris terhadap semua label ini.
-var LABEL_PATTERN = /^(Nomor Referensi|No\.\s*Ref|Tanggal Transaksi|Tanggal|Jenis Transaksi|Nama Merchant|Nama Tujuan|Bank Tujuan|Keterangan|Catatan|Nominal)\s{2,}(.+)$/i;
+// CATATAN: sempat ditulis \s{2,} (asumsi label-nilai dipisah banyak
+// spasi, berdasarkan tampilan HTML yang di-render). Setelah dicek
+// langsung ke getPlainBody() email asli, ternyata cuma dipisah SATU
+// spasi. \s+ di bawah ini menangani keduanya.
+var LABEL_PATTERN = /^(Nomor Referensi|No\.\s*Ref|Tanggal Transaksi|Tanggal|Jenis Transaksi|Nama Merchant|Nama Tujuan|Bank Tujuan|Keterangan|Catatan|Nominal)\s+(.+)$/i;
 
 // Lihat TODO poin 6 di atas -- daftar ini belum pernah divalidasi
 // terhadap email transfer masuk yang sungguhan.
