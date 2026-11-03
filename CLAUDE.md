@@ -1,190 +1,398 @@
-# DanaTrack
+# CLAUDE.md --- DanaTrack
 
-Aplikasi pencatat keuangan pribadi (income/expense tracker) berbasis Laravel, antarmuka berbahasa Indonesia.
+Dokumen ini menjadi konteks proyek untuk Claude agar dapat melanjutkan
+DanaTrack dari kondisi terakhir tanpa membangun ulang dari awal. Baca
+dokumen ini sebelum mengubah kode.
 
-## Stack
+## 1. Ringkasan Proyek
 
-| Bagian | Teknologi |
-|---|---|
-| Framework | Laravel `^13.17`, PHP `^8.3` (lokal: 8.3.35) |
-| Auth | Laravel Breeze `^2.4` (Blade + Alpine stack) |
-| Frontend | Blade + Alpine.js 3, Tailwind CSS 3 (via PostCSS), Vite 8 |
-| Database | MySQL (`danatrack` @ 127.0.0.1:3306, Laragon) |
-| Session/Cache/Queue | driver `database` |
-| Grafik | Chart.js dari CDN jsDelivr (bukan bundel Vite) |
-| Test | PHPUnit 12, SQLite `:memory:` (lihat `phpunit.xml`) |
+**Nama:** DanaTrack\
+**Tujuan:** Aplikasi web pencatatan pemasukan dan pengeluaran pribadi,
+dengan dashboard, kategori, transaksi, laporan, ekspor Excel, serta
+integrasi Telegram. Pada tahap berikutnya, aplikasi direncanakan
+menerima notifikasi transaksi dari email bank melalui Google Apps Script
+(GAS), lalu meminta persetujuan melalui Telegram.
 
-Tooling tambahan: `laravel/pint` (formatter), `laravel/pail` (log tail), `laravel/pao`, `laravel/tinker`.
+**Pengguna utama:** Pemilik akun yang login. Data transaksi dan kategori
+harus terisolasi per pengguna.
 
-## Perintah
+**Bahasa UI:** Bahasa Indonesia.
 
-```sh
-composer setup          # install + key:generate + migrate + npm install + build
-composer dev            # php artisan dev (server + vite + queue, concurrently)
-composer test           # config:clear + php artisan test
-npm run dev             # vite saja
-vendor/bin/pint         # format PHP
+**Prinsip penting:** - Jangan mulai proyek dari nol; lanjutkan struktur
+Laravel yang sudah ada. - Jangan menghapus atau mengganti fitur yang
+sudah berfungsi. - Sebelum mengedit file, periksa isi file aktual di
+repository karena konteks ini dapat tertinggal dari perubahan terbaru. -
+Jangan mengarang nama kolom, relasi, route, atau struktur tabel. Periksa
+migration/model/controller yang ada. - Jangan pernah meminta atau
+menampilkan token Telegram, password, atau kredensial `.env`. -
+Transaksi manual dari website harus langsung berstatus `approved` dan
+memicu notifikasi Telegram. - Transaksi otomatis dari email (fitur
+mendatang) akan berstatus `pending` sampai pengguna menyetujui/menolak
+melalui Telegram.
+
+## 2. Lingkungan Pengembangan
+
+Informasi terakhir yang diketahui: - OS: Windows - Local stack:
+Laragon - Proyek: `D:\Aplikasi\laragon\www\DanaTrack` - Laravel: 13.39
+(per informasi pengguna) - PHP: 8.3.35 (per informasi pengguna) -
+Autentikasi: Laravel Breeze (Blade) - Frontend: Blade + Tailwind CSS +
+Alpine.js (Breeze) - Database: sesuai konfigurasi `.env` lokal; jangan
+mengasumsikan engine tanpa memeriksa - Chart: Chart.js sudah digunakan
+pada dashboard - Spreadsheet export: direncanakan/dibuat menggunakan
+`maatwebsite/excel`; pastikan package benar-benar terpasang dengan
+memeriksa `composer.json`/`composer.lock`.
+
+Perintah lokal yang umum:
+
+``` bash
+cd D:\Aplikasi\laragon\www\DanaTrack
+php artisan serve
+php artisan route:list
 php artisan migrate:status
+php artisan view:clear
+php artisan config:clear
+npm run dev
 ```
 
-Laragon harus menyala sebelum perintah apa pun yang menyentuh database — tanpa MySQL, `migrate:status` gagal dengan `SQLSTATE[HY000] [2002]`.
+Jangan menjalankan migration destruktif (`migrate:fresh`,
+`migrate:refresh`) tanpa persetujuan eksplisit dan backup data.
 
-## Domain
+## 3. Fitur dan Status Implementasi
 
-### Model & relasi (`app/Models/`)
+### Sudah dibuat / pernah diuji
 
-```
-User ──< Category ──< Transaction
- │                        │
- ├──< Transaction         ├──< EmailLog
- ├──< EmailLog            └──< TelegramMessage
- ├──< TelegramMessage
- ├──< approvedTransactions (Transaction.approved_by)
- └──1 TelegramUser
-```
+-   Login/register melalui Laravel Breeze.
+-   Navigasi utama: Dashboard, Kategori, Transaksi, Laporan.
+-   CRUD kategori.
+-   CRUD transaksi manual.
+-   Dashboard dengan ringkasan pemasukan, pengeluaran, saldo, transaksi
+    terbaru, grafik 6 bulan, filter periode, dan ringkasan pengeluaran
+    kategori.
+-   Halaman laporan dengan filter tanggal, total
+    pemasukan/pengeluaran/saldo bersih, rekap pengeluaran per kategori,
+    dan daftar transaksi.
+-   Chart.js dashboard pernah berhasil tampil.
+-   UI menggunakan Blade components Breeze.
 
-- `Transaction` — inti aplikasi. Kolom penting: `transaction_date` (datetime), `type` (`expense|income`), `amount` (`decimal:15,2`), `category_id` (nullable, `nullOnDelete`), `source`, `status`, `reference_number`, `approved_by`, `approved_at`.
-- `Category` — `unique(user_id, name, type)`, `color` kolom `char(7)` default `#64748B`.
-- `EmailLog` / `TelegramUser` / `TelegramMessage` — tabel audit untuk kanal masuk transaksi.
+**Catatan:** Status di atas berasal dari percakapan; tetap verifikasi
+repository dan jalankan aplikasi sebelum menganggap semuanya masih
+valid.
 
-### Dua enum yang menentukan arsitektur
+### Sedang dikerjakan / belum dikonfirmasi selesai
 
-- `transactions.source` = `email` | `website` | `telegram` — DanaTrack dirancang menerima transaksi dari tiga kanal.
-- `transactions.status` = `pending` | `approved`, default `approved`.
+-   ReportController pernah mengalami query SQL ambigu pada kolom
+    `user_id` karena clone query dan join categories. Solusi terakhir
+    yang disarankan adalah query baru dengan kolom terqualifikasi, bukan
+    clone query dasar:
 
-**Yang sudah jadi hanya kanal `website`.** Model + migrasi untuk email dan Telegram sudah ada, tapi tidak ada controller, job, command, webhook, atau route yang menulis ke tabel-tabel itu. `TELEGRAM_BOT_TOKEN` ada di `.env` tapi tidak terdaftar di `config/services.php`, tidak ada di `.env.example`, dan tidak dibaca kode mana pun. Anggap lapisan email/Telegram sebagai *scaffolding*, bukan fitur.
-
-Konsekuensi dari `status`: `TransactionController::store()` selalu menulis `status = 'approved'` + `approved_by = auth()->id()`. Tidak ada route/UI approval, dan Dashboard serta Laporan memfilter `where('status', 'approved')` — jadi transaksi `pending` (yang nanti datang dari email/Telegram) tidak akan terlihat di mana pun sampai alur approval dibuat.
-
-## Routing (`routes/web.php`)
-
-| Route | Controller | Middleware |
-|---|---|---|
-| `/` | closure → `welcome` | — |
-| `/dashboard` | `DashboardController@index` | `auth`, `verified` |
-| `categories.*` (resource) | `CategoryController` | `auth` |
-| `transactions.*` (resource) | `TransactionController` | `auth` |
-| `/reports` | `ReportController@index` | `auth` |
-| `/profile` (edit/update/destroy) | `ProfileController` | `auth` |
-| `/up` | health check | — |
-
-`routes/auth.php` = bawaan Breeze (register, login, forgot/reset password, verify email, confirm password, logout). Tidak ada `routes/api.php`.
-
-## Konvensi yang WAJIB diikuti
-
-### 1. Bahasa: campuran yang disengaja
-
-- **Inggris**: nama tabel, kolom, model, controller, route, nilai enum (`expense`, `income`, `approved`).
-- **Indonesia**: UI/Blade, pesan flash (`'Kategori berhasil ditambahkan.'`), pesan validasi kustom, **dan variabel di dalam controller/view** — `$totalPemasukan`, `$totalPengeluaran`, `$saldo`, `$transaksiTerbaru`, `$rekapKategori`, `$tanggalAwal`, `$tanggalAkhir`, `$labelsGrafik`.
-- Query string filter juga Indonesia: `?periode=bulan_ini&dari=…&sampai=…` dengan nilai `hari_ini|bulan_ini|tahun_ini|rentang`.
-
-Pertahankan pola ini saat menambah kode — jangan "perbaiki" menjadi seragam satu bahasa.
-
-### 2. Otorisasi manual, tanpa Policy
-
-Tidak ada Policy/Gate sama sekali. Setiap controller melakukan scoping dan cek kepemilikan sendiri:
-
-```php
-Category::where('user_id', auth()->id())->…             // selalu scope query
-abort_unless($category->user_id === auth()->id(), 403); // private authorizeX() helper
+``` php
+$rekapKategori = Transaction::query()
+    ->where('transactions.user_id', $userId)
+    ->where('transactions.status', 'approved')
+    ->whereBetween('transactions.transaction_date', [$tanggalAwal, $tanggalAkhir])
+    ->where('transactions.type', 'expense')
+    ->leftJoin('categories', 'transactions.category_id', '=', 'categories.id')
+    ->select(
+        'categories.name as nama_kategori',
+        DB::raw('SUM(transactions.amount) as total')
+    )
+    ->groupBy('categories.name')
+    ->orderByDesc('total')
+    ->get();
 ```
 
-Lihat `CategoryController::authorizeCategory()` dan `TransactionController::authorizeTransaction()`. Controller baru harus melakukan hal yang sama, atau pindahkan seluruhnya ke Policy sekaligus — jangan setengah-setengah.
+Pastikan query aktual, nama kolom, dan grouping sesuai migration/model.
+Lebih aman group by `categories.id` juga jika kategori dengan nama sama
+dapat ada. - Ekspor Excel sedang direncanakan/diberikan implementasi
+contoh. Pastikan package, Export class, controller method, route, dan
+tombol view sudah benar-benar ada sebelum melanjutkan. - Integrasi
+Telegram belum selesai. Bot dibuat oleh pengguna dengan username
+`DanaTrackPro_bot` (tautan bot: `https://t.me/DanaTrackPro_bot`). Token
+pernah terekspos di percakapan dan menghasilkan HTTP 401. Pengguna perlu
+revoke token lama di BotFather dan memakai token baru yang dirahasiakan.
+Jangan menyalin token lama dari chat atau dokumen ini.
 
-### 3. Validasi inline, bukan FormRequest
+## 4. Struktur Data yang Diketahui
 
-`CategoryController` dan `TransactionController` memakai `$request->validate([...])` langsung. FormRequest hanya ada untuk hal bawaan Breeze (`LoginRequest`, `ProfileUpdateRequest`).
+Periksa migrations aktual untuk memastikan detail. Skema yang pernah
+dibahas:
 
-`TransactionController::validateCategory()` menegakkan aturan bahwa kategori harus milik user **dan** `type`-nya cocok dengan `type` transaksi.
+### `categories`
 
-### 4. Format Rupiah manual
+-   `id`
+-   `user_id`
+-   `name`
+-   `type` (`expense` / `income`)
+-   `color`
+-   timestamps
 
-Tidak ada helper/macro. Di Blade: `Rp{{ number_format($nilai, 0, ',', '.') }}`. Di JS: `new Intl.NumberFormat('id-ID')`.
+Kategori milik pengguna yang login.
 
-### 5. Script per-halaman lewat stack
+### `transactions`
 
-`layouts/app.blade.php` menyediakan `@stack('scripts')` sebelum `</body>`. `dashboard.blade.php` memakai `@push('scripts')` untuk memuat Chart.js dari CDN. Script khusus halaman masuk lewat jalur ini, bukan ke `resources/js/app.js`.
+-   `id`
+-   `user_id`
+-   `category_id` nullable
+-   `transaction_date` datetime
+-   `type` (`expense` / `income`)
+-   `amount` decimal
+-   `description`
+-   `merchant` nullable
+-   `source` enum/string (`email`, `website`, `telegram`)
+-   `status` (`pending`, `approved`)
+-   `reference_number` nullable
+-   `approved_by` nullable
+-   `approved_at` nullable
+-   timestamps
 
-## Catatan per fitur
+Semua transaksi harus difilter dengan `user_id` sesuai pengguna login.
+Data untuk dashboard/laporan hanya memasukkan `status = approved`.
 
-**Dashboard** (`DashboardController`) — filter periode, lalu tiga total (pemasukan/pengeluaran/saldo), 5 transaksi terbaru, kategori pengeluaran terbesar, dan grafik bar 6 bulan terakhir. Query dasar dibangun sekali lalu `(clone $transaksiPeriode)` dipakai berulang; ikuti pola clone ini. Periode `rentang` memvalidasi `dari`/`sampai` secara kondisional di dalam `switch`.
+### Tabel lain yang pernah disebut
 
-**Laporan** (`ReportController`) — rentang tanggal (default bulan ini), total, rekap pengeluaran per kategori via `leftJoin` + `groupBy('categories.name')`, dan daftar transaksi lengkap. Daftar ini `->get()` tanpa paginasi; rentang tanggal lebar akan memuat semua baris sekaligus.
+-   `email_logs`
+-   `telegram_users`
+-   `telegram_messages`
 
-**Transaksi** — index `paginate(10)`. Form create/edit punya JS kecil yang menyembunyikan `<option>` kategori yang `type`-nya tidak cocok dengan jenis transaksi terpilih (lihat atribut `data-type` pada option).
+Keberadaan dan kolom aktual harus diverifikasi dari migrations.
 
-**Kategori** — CRUD penuh, unik per `(user, name, type)`, warna hex.
+## 5. Model dan Relasi
 
-## Utang teknis & jebakan yang diketahui
+Model yang diketahui: - `App\Models\Transaction` -
+`App\Models\Category` - `App\Models\User`
 
-Catat ini sebelum mengubah kode di area terkait:
+Relasi yang diharapkan: - Transaction belongsTo Category melalui
+`category_id`. - Category hasMany Transaction. - User hasMany Category
+dan Transaction.
 
-1. **SQL khusus MySQL di query dashboard.** `DashboardController` memakai `selectRaw('YEAR(transaction_date) …, MONTH(transaction_date) …')`. `phpunit.xml` menjalankan test di SQLite `:memory:`, yang tidak punya `YEAR()`/`MONTH()` — test untuk dashboard akan gagal sampai query dibuat portabel atau test diarahkan ke MySQL.
-2. **Tidak ada factory untuk `Category`/`Transaction`.** Hanya `UserFactory` yang ada, jadi belum bisa menulis test domain tanpa membuatnya lebih dulu.
-3. **Nol test untuk kode domain.** `tests/` hanya berisi bawaan Breeze (auth, profile, example). Category, Transaction, Dashboard, Report belum tersentuh.
-4. **`validateCategory()` mengembalikan JSON 422 ke form HTML.** `abort(response()->json([...], 422))` di `TransactionController` akan menampilkan JSON mentah ke pengguna, bukan error di form. Seharusnya `ValidationException::withMessages()`.
-5. **Panjang `color` tidak konsisten.** Kolom `char(7)`, tapi validasi mengizinkan `max:20` → input 8–20 karakter lolos validasi lalu ditolak/terpotong database. Default juga beda huruf: migrasi `#64748B`, controller `#64748b`.
-6. **Dependensi Tailwind ganda.** Pipeline aktif = Tailwind 3 + PostCSS (`postcss.config.js`, `@tailwind` directives, `tailwind.config.js`). Tapi `@tailwindcss/vite ^4.0.0` ada di `devDependencies` dan `vite.config.js` tidak memakainya. Pilih satu sebelum menyentuh build.
-7. **`TELEGRAM_BOT_TOKEN` terisi di `.env`.** Token hidup tersimpan plaintext di file lokal. Rotasi token itu sebelum repo ini dibagikan, dan daftarkan key-nya di `config/services.php` + `.env.example` saat kanal Telegram digarap.
-8. **Belum ada repo git.** Direktori ini bukan git repository — tidak ada riwayat atau jaring keamanan untuk rollback.
-9. **`README.md` masih bawaan Laravel**, belum mendeskripsikan DanaTrack.
-10. **Composer 2.4.1** (rilis 2022) — cukup tua untuk Laravel 13; pertimbangkan `composer self-update`.
+Periksa model aktual sebelum mengubah. Pastikan `$fillable`, casts, dan
+relasi sesuai schema.
 
-## Langkah selanjutnya yang paling masuk akal
+## 6. Routes yang Pernah Ada
 
-Urutan ini mengikuti bentuk yang sudah ada di kode, bukan desain baru:
+`routes/web.php` memiliki pola:
 
-1. Buat `CategoryFactory` + `TransactionFactory`, lalu test fitur untuk CRUD + isolasi antar-user (`abort_unless` 403).
-2. Perbaiki (4) dan (5) — keduanya kecil dan berdampak langsung ke pengguna.
-3. Bangun alur approval: daftar transaksi `pending`, aksi approve yang mengisi `approved_by`/`approved_at`. Tanpa ini, kanal email/Telegram tidak ada gunanya.
-4. Baru setelah itu, isi kanal `telegram` (webhook → `TelegramMessage` → `Transaction` status `pending`) dan `email`.
+``` php
+Route::get('/', function () {
+    return view('welcome');
+});
 
----
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-<laravel-boost-guidelines>
-# Laravel Application
+Route::middleware('auth')->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('transactions', TransactionController::class);
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+    Route::get('/reports', [ReportController::class, 'index'])
+        ->name('reports.index');
 
-## Prerequisites
+    // Profile routes dari Breeze
+});
 
-Verify that PHP and Composer are available:
-
-```sh
-php -v
-composer -V
+require __DIR__.'/auth.php';
 ```
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
+Route ekspor Excel yang pernah direncanakan:
 
-macOS:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
+``` php
+Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])
+    ->name('reports.exportExcel');
 ```
 
-Windows PowerShell:
+Pastikan route ini berada di middleware `auth`, dan controller import
+benar. Jangan menambahkan route duplikat.
 
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
+## 7. Navigasi Breeze
+
+File: `resources/views/layouts/navigation.blade.php`
+
+Menu desktop dan mobile: - Dashboard --- `route('dashboard')` - Kategori
+--- `route('categories.index')` - Transaksi ---
+`route('transactions.index')` - Laporan --- `route('reports.index')`
+
+Dropdown: - Profil --- `route('profile.edit')` - Keluar --- POST
+`route('logout')`
+
+Alpine hamburger:
+
+``` blade
+<nav x-data="{ open: false }">
+...
+<button @click="open = ! open">
 ```
 
-Linux:
+Kode navigation pernah diperbaiki secara menyeluruh. Periksa file aktual
+sebelum mengganti.
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
+## 8. Aturan Bisnis Transaksi
+
+### Transaksi manual dari website
+
+-   Pengguna mengisi form pemasukan/pengeluaran.
+-   Validasi kategori harus sesuai jenis transaksi (`income` atau
+    `expense`) dan milik pengguna yang login.
+-   Simpan `user_id` dari authenticated user, jangan dari input form.
+-   `source = website`.
+-   `status = approved`.
+-   `approved_by = user_id` (jika schema mendukung).
+-   `approved_at = now()`.
+-   Setelah transaksi berhasil tersimpan, kirim notifikasi Telegram.
+-   Jika Telegram gagal, transaksi tetap tersimpan. Jangan rollback
+    transaksi hanya karena layanan Telegram tidak tersedia. Catat/log
+    error dan tampilkan UX yang sesuai.
+
+### Transaksi otomatis dari email (fitur mendatang)
+
+-   GAS membaca email notifikasi bank (rencana awal BRI).
+-   GAS mengirim payload ke endpoint backend yang diamankan.
+-   Laravel menyimpan transaksi `source = email`, `status = pending`.
+-   Kirim pesan Telegram dengan tombol Setujui/Tolak.
+-   Hanya setelah disetujui status menjadi `approved`; baru masuk
+    dashboard/laporan.
+-   Tolak transaksi dengan status yang jelas (perlu diputuskan apakah
+    memakai `rejected` atau field status tambahan; jangan menambah enum
+    tanpa menyesuaikan migration).
+-   Implementasikan idempotency menggunakan `reference_number`/ID
+    transaksi agar email yang sama tidak membuat duplikat.
+-   Jangan menganggap isi email sebagai data tepercaya; validasi amount,
+    tanggal, tipe, referensi, dan signature/token API.
+
+## 9. Integrasi Telegram --- Tujuan dan Status
+
+### Tujuan tahap pertama
+
+Kirim notifikasi Telegram saat pengguna menambah transaksi manual di
+website.
+
+Contoh pesan:
+
+    DanaTrack — Transaksi Baru
+
+    Jenis: Pengeluaran
+    Jumlah: Rp25.000
+    Kategori: Makanan
+    Tanggal: 03 November 2026
+    Deskripsi: Makan siang
+    Status: Disetujui
+
+Untuk transaksi manual: - Tidak perlu tombol Setujui/Tolak. - Bot hanya
+mengirim notifikasi ke chat pengguna.
+
+Untuk transaksi email otomatis (tahap selanjutnya): - Inline keyboard
+Setujui/Tolak. - Callback webhook harus memverifikasi transaksi milik
+user yang terhubung dengan Telegram. - Callback harus aman terhadap klik
+berulang dan transaksi yang sudah diproses. - Simpan Telegram chat/user
+mapping secara aman; jangan percaya `chat_id` yang dikirim sembarang
+client.
+
+### Bot yang dibuat
+
+-   Username: `DanaTrackPro_bot`
+-   URL: `https://t.me/DanaTrackPro_bot`
+-   Token lama pernah terekspos dan `getUpdates` mengembalikan
+    `401 Unauthorized`.
+-   **Token lama harus dianggap compromised/invalid.** Revoke via
+    @BotFather dan gunakan token baru.
+-   Chat ID belum berhasil dikonfirmasi.
+-   Pengguna belum menyatakan token baru valid atau Chat ID sudah
+    didapat.
+
+### Rencana implementasi yang disarankan
+
+1.  Revoke token lama di BotFather; generate token baru.
+2.  User buka bot dan kirim `/start`.
+3.  Gunakan `getUpdates` dengan token baru untuk mendapatkan
+    `message.chat.id`. Jangan meminta user mengirim token.
+4.  Simpan secrets hanya di `.env`:
+
+``` env
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=
 ```
 
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
+5.  Tambahkan config di `config/services.php`:
 
-## Agent Setup
-
-Install Laravel Boost from the application root before making application changes:
-
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
+``` php
+'telegram' => [
+    'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    'chat_id' => env('TELEGRAM_CHAT_ID'),
+],
 ```
 
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+6.  Jalankan `php artisan config:clear`.
+7.  Buat service, misalnya `app/Services/TelegramService.php`, yang
+    menggunakan Laravel HTTP client:
+    -   POST ke Telegram Bot API `sendMessage`
+    -   gunakan `config('services.telegram.bot_token')`
+    -   kirim `chat_id`, `text`, dan optional `parse_mode`
+    -   gunakan timeout, tangani response non-2xx, dan log tanpa
+        membocorkan token.
+8.  Buat endpoint/command sederhana untuk uji pesan (jangan expose
+    endpoint publik tanpa auth).
+9.  Panggil service setelah transaksi manual tersimpan.
+10. Test income dan expense, serta test ketika token/chat ID salah untuk
+    memastikan transaksi tetap tersimpan.
+
+**Keamanan:** Jangan menulis token ke log, source code, view, Git, atau
+pesan chat. Pastikan `.env` di `.gitignore`. Jika token terekspos,
+revoke segera.
+
+## 10. Dashboard dan Reports
+
+Dashboard: - Ringkasan total pemasukan, pengeluaran, saldo. - Data
+approved milik user. - Transaksi terbaru. - Grafik 6 bulan (Chart.js). -
+Filter periode: `hari_ini`, `bulan_ini`, `tahun_ini`, `rentang`. -
+Ringkasan kategori pengeluaran.
+
+Reports: - Filter `dari` dan `sampai`. - Validasi tanggal akhir tidak
+sebelum tanggal awal. - Default periode pernah memakai bulan berjalan. -
+Ringkasan pemasukan, pengeluaran, saldo bersih. - Rekap kategori
+pengeluaran. - Daftar transaksi detail. - Data harus terfilter user +
+approved. - Export Excel harus memakai filter tanggal yang sama dengan
+halaman laporan.
+
+## 11. Panduan Cara Bekerja untuk Claude
+
+Saat mulai: 1. Periksa `README.md`, `composer.json`, `package.json`,
+`.env.example` (jangan tampilkan `.env`), migrations, models, routes,
+controllers, dan views terkait. 2. Jalankan `git status` bila Git
+tersedia. 3. Catat kondisi aktual dan file yang sudah ada. 4. Jangan
+mengganti banyak file sekaligus tanpa kebutuhan. 5. Untuk setiap fitur,
+berikan daftar file yang akan diubah dan alasan. 6. Implementasikan
+dalam langkah kecil, jalankan pemeriksaan yang relevan
+(`php artisan route:list`, test, lint/build jika tersedia). 7. Jangan
+menghapus data atau melakukan migration destruktif. 8. Jangan membuat
+kredensial palsu atau hardcode secrets. 9. Gunakan Bahasa Indonesia
+untuk UI dan penjelasan. 10. Berikan instruksi terminal yang sesuai
+Windows/Laragon.
+
+### Prioritas pekerjaan saat ini
+
+1.  Periksa kondisi aktual halaman Reports dan ekspor Excel.
+2.  Selesaikan Telegram Bot API connection dengan token baru yang valid
+    dan Chat ID.
+3.  Buat `TelegramService` dan test sendMessage.
+4.  Hubungkan notifikasi ke `TransactionController` setelah transaksi
+    manual berhasil dibuat.
+5.  Uji pemasukan dan pengeluaran manual.
+6.  Setelah itu baru rancang webhook GAS/email dan persetujuan transaksi
+    pending melalui Telegram.
+
+## 12. Definition of Done --- Telegram Manual Notification
+
+Fitur dianggap selesai jika: - Token dan Chat ID tersimpan di `.env`,
+tidak di source code. - Pesan uji dapat dikirim dari Laravel ke
+Telegram. - Membuat transaksi pemasukan manual mengirim notifikasi. -
+Membuat transaksi pengeluaran manual mengirim notifikasi. - Pesan berisi
+jenis, nominal, kategori, tanggal, deskripsi, dan status. - Transaksi
+tetap tersimpan meskipun Telegram gagal. - Tidak ada token rahasia di
+log atau response. - User isolation tetap diterapkan.
+
+## 13. Catatan Kredensial
+
+**Jangan masukkan token Telegram asli ke CLAUDE.md.** File ini aman
+untuk menyimpan konteks teknis, tetapi tidak untuk secrets. Simpan token
+di `.env` lokal. Bila memakai Claude Code, jangan menempelkan nilai
+`.env` ke prompt. Pastikan `.env` tidak dilacak Git.
