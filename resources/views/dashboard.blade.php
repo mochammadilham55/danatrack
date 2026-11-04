@@ -1,208 +1,159 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard DanaTrack
+        <h2 class="text-2xl font-extrabold text-slate-900">
+            Halo, {{ Auth::user()->name }} 👋
         </h2>
+        <p class="text-slate-500 text-sm mt-0.5">Berikut ringkasan keuanganmu.</p>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-6">
 
-            {{-- Filter periode --}}
-            <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
-                <form method="GET" action="{{ route('dashboard') }}"
-                    class="flex flex-col md:flex-row md:items-end gap-4">
+        {{-- Filter periode --}}
+        <div class="bg-white rounded-3xl shadow-sm p-5">
+            <form method="GET" action="{{ route('dashboard') }}"
+                class="flex flex-col md:flex-row md:items-end gap-4">
 
-                    <div>
-                        <label for="periode" class="block text-sm font-medium text-gray-700 mb-1">
-                            Periode
-                        </label>
+                <div>
+                    <label for="periode" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">
+                        Periode
+                    </label>
 
-                        <select name="periode" id="periode"
-                                class="border-gray-300 rounded-md shadow-sm">
-                            <option value="hari_ini" @selected($periode === 'hari_ini')>
-                                Hari Ini
-                            </option>
-                            <option value="bulan_ini" @selected($periode === 'bulan_ini')>
-                                Bulan Ini
-                            </option>
-                            <option value="tahun_ini" @selected($periode === 'tahun_ini')>
-                                Tahun Ini
-                            </option>
-                            <option value="rentang" @selected($periode === 'rentang')>
-                                Rentang Tanggal
-                            </option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="dari" class="block text-sm font-medium text-gray-700 mb-1">
-                            Dari
-                        </label>
-                        <input type="date" name="dari" id="dari"
-                            value="{{ request('dari') }}"
-                            class="border-gray-300 rounded-md shadow-sm">
-                    </div>
-
-                    <div>
-                        <label for="sampai" class="block text-sm font-medium text-gray-700 mb-1">
-                            Sampai
-                        </label>
-                        <input type="date" name="sampai" id="sampai"
-                            value="{{ request('sampai') }}"
-                            class="border-gray-300 rounded-md shadow-sm">
-                    </div>
-
-                    <button type="submit"
-                            class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                        Terapkan
-                    </button>
-
-                    <a href="{{ route('dashboard') }}"
-                    class="px-4 py-2 text-gray-600 hover:text-gray-900">
-                        Reset
-                    </a>
-                </form>
-            </div>
-
-            {{-- Ringkasan keuangan --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <p class="text-sm text-gray-500">Total Pemasukan</p>
-                    <h3 class="text-2xl font-bold text-green-600 mt-2">
-                        Rp{{ number_format($totalPemasukan, 0, ',', '.') }}
-                    </h3>
+                    <select name="periode" id="periode"
+                            class="rounded-full border-2 border-slate-100 text-sm px-4 py-2 font-medium bg-slate-50 focus:border-indigo-400 focus:ring-0">
+                        <option value="hari_ini" @selected($periode === 'hari_ini')>
+                            Hari Ini
+                        </option>
+                        <option value="bulan_ini" @selected($periode === 'bulan_ini')>
+                            Bulan Ini
+                        </option>
+                        <option value="tahun_ini" @selected($periode === 'tahun_ini')>
+                            Tahun Ini
+                        </option>
+                        <option value="rentang" @selected($periode === 'rentang')>
+                            Rentang Tanggal
+                        </option>
+                    </select>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <p class="text-sm text-gray-500">Total Pengeluaran</p>
-                    <h3 class="text-2xl font-bold text-red-600 mt-2">
-                        Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}
-                    </h3>
+                <div>
+                    <label for="dari" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">
+                        Dari
+                    </label>
+                    <input type="date" name="dari" id="dari"
+                        value="{{ request('dari') }}"
+                        class="rounded-full border-2 border-slate-100 text-sm px-4 py-2 bg-slate-50 focus:border-indigo-400 focus:ring-0">
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <p class="text-sm text-gray-500">Saldo</p>
-                    <h3 class="text-2xl font-bold text-blue-600 mt-2">
-                        Rp{{ number_format($saldo, 0, ',', '.') }}
-                    </h3>
+                <div>
+                    <label for="sampai" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">
+                        Sampai
+                    </label>
+                    <input type="date" name="sampai" id="sampai"
+                        value="{{ request('sampai') }}"
+                        class="rounded-full border-2 border-slate-100 text-sm px-4 py-2 bg-slate-50 focus:border-indigo-400 focus:ring-0">
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <p class="text-sm text-gray-500">Pengeluaran Terbesar</p>
+                <button type="submit"
+                        class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-bold shadow-lg shadow-indigo-200">
+                    Terapkan
+                </button>
+            </form>
+        </div>
 
-                    @if ($kategoriPengeluaranTerbesar)
-                        <h3 class="text-lg font-bold text-gray-800 mt-2">
-                            {{ $kategoriPengeluaranTerbesar->category?->name ?? 'Tanpa Kategori' }}
-                        </h3>
-
-                        <p class="text-red-600 font-semibold mt-1">
-                            Rp{{ number_format($kategoriPengeluaranTerbesar->total, 0, ',', '.') }}
-                        </p>
-                    @else
-                        <p class="text-gray-500 mt-2">Belum ada pengeluaran.</p>
-                    @endif
-                </div>
-
-            </div>
-
-            {{-- Grafik pemasukan dan pengeluaran --}}
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    Grafik Keuangan 6 Bulan Terakhir
+        {{-- Kartu statistik --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="rounded-3xl p-6 text-white shadow-lg shadow-emerald-200 bg-gradient-to-br from-emerald-500 to-teal-600">
+                <p class="text-sm opacity-90">Total Pemasukan</p>
+                <h3 class="text-3xl font-extrabold mt-2">
+                    Rp{{ number_format($totalPemasukan, 0, ',', '.') }}
                 </h3>
+            </div>
 
-                <div class="relative h-80">
+            <div class="rounded-3xl p-6 text-white shadow-lg shadow-rose-200 bg-gradient-to-br from-rose-500 to-orange-500">
+                <p class="text-sm opacity-90">Total Pengeluaran</p>
+                <h3 class="text-3xl font-extrabold mt-2">
+                    Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}
+                </h3>
+            </div>
+
+            <div class="rounded-3xl p-6 text-white shadow-lg shadow-indigo-200 bg-gradient-to-br from-indigo-500 to-purple-600">
+                <p class="text-sm opacity-90">Saldo</p>
+                <h3 class="text-3xl font-extrabold mt-2">
+                    Rp{{ number_format($saldo, 0, ',', '.') }}
+                </h3>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {{-- Grafik --}}
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm p-6">
+                <h3 class="font-bold text-slate-800 mb-4">Grafik 6 Bulan Terakhir</h3>
+                <div style="height: 260px;">
                     <canvas id="grafikKeuangan"></canvas>
                 </div>
             </div>
 
-            {{-- Transaksi terbaru --}}
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        Transaksi Terbaru
-                    </h3>
+            {{-- Kategori pengeluaran terbesar --}}
+            <div class="bg-white rounded-3xl shadow-sm p-6">
+                <h3 class="font-bold text-slate-800 mb-4">Kategori Pengeluaran Terbesar</h3>
 
-                    <a href="{{ route('transactions.index') }}"
-                       class="text-sm text-indigo-600 hover:text-indigo-800">
-                        Lihat Semua
-                    </a>
-                </div>
+                @if ($kategoriPengeluaranTerbesar)
+                    <div class="flex items-center gap-3 bg-amber-50 rounded-2xl p-4">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold"
+                              style="background-color: {{ $kategoriPengeluaranTerbesar->category?->color ?? '#64748b' }}">
+                            {{ \Illuminate\Support\Str::of($kategoriPengeluaranTerbesar->category?->name ?? '-')->substr(0, 1)->upper() }}
+                        </span>
+                        <div>
+                            <p class="font-bold text-slate-800">
+                                {{ $kategoriPengeluaranTerbesar->category?->name ?? 'Tanpa Kategori' }}
+                            </p>
+                            <p class="text-sm text-slate-500">
+                                Rp{{ number_format($kategoriPengeluaranTerbesar->total, 0, ',', '.') }}
+                            </p>
+                        </div>
+                    </div>
+                @else
+                    <p class="text-sm text-slate-400">Belum ada data pengeluaran pada periode ini.</p>
+                @endif
+            </div>
+        </div>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Tanggal
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Keterangan
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Kategori
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Jenis
-                                </th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                                    Nominal
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($transaksiTerbaru as $transaksi)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                        {{ \Carbon\Carbon::parse($transaksi->transaction_date)->format('d/m/Y') }}
-                                    </td>
-
-                                    <td class="px-6 py-4 text-sm text-gray-800">
-                                        {{ $transaksi->description }}
-                                    </td>
-
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                        {{ $transaksi->category?->name ?? '-' }}
-                                    </td>
-
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        @if ($transaksi->type === 'income')
-                                            <span class="text-green-600 font-medium">
-                                                Pemasukan
-                                            </span>
-                                        @else
-                                            <span class="text-red-600 font-medium">
-                                                Pengeluaran
-                                            </span>
-                                        @endif
-                                    </td>
-
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium
-                                        {{ $transaksi->type === 'income' ? 'text-green-600' : 'text-red-600' }}">
-                                        {{ $transaksi->type === 'income' ? '+' : '-' }}Rp{{ number_format($transaksi->amount, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                                        Belum ada transaksi.
-                                        <a href="{{ route('transactions.create') }}"
-                                           class="text-indigo-600 hover:underline">
-                                            Tambah transaksi pertama
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+        {{-- Transaksi terbaru --}}
+        <div class="bg-white rounded-3xl shadow-sm overflow-hidden">
+            <div class="p-6 pb-2">
+                <h3 class="font-bold text-slate-800">Transaksi Terbaru</h3>
             </div>
 
+            @if ($transaksiTerbaru->isEmpty())
+                <p class="text-center text-slate-400 py-8">Belum ada transaksi pada periode ini.</p>
+            @else
+                <div class="divide-y divide-slate-50">
+                    @foreach ($transaksiTerbaru as $transaksi)
+                        <div class="flex items-center justify-between px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold text-white"
+                                      style="background-color: {{ $transaksi->category?->color ?? '#94a3b8' }}">
+                                    {{ \Illuminate\Support\Str::of($transaksi->category?->name ?? '?')->substr(0, 1)->upper() }}
+                                </span>
+                                <div>
+                                    <p class="font-semibold text-slate-800 text-sm">{{ $transaksi->description }}</p>
+                                    <p class="text-xs text-slate-400">
+                                        {{ $transaksi->transaction_date->translatedFormat('d M') }} ·
+                                        {{ $transaksi->category?->name ?? 'Tanpa kategori' }}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-sm {{ $transaksi->type === 'income' ? 'text-emerald-600' : 'text-rose-500' }}">
+                                {{ $transaksi->type === 'income' ? '+' : '-' }}Rp{{ number_format($transaksi->amount, 0, ',', '.') }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
+
     </div>
+
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -221,14 +172,14 @@
                     {
                         label: 'Pemasukan',
                         data: dataPemasukan,
-                        backgroundColor: '#16a34a',
-                        borderRadius: 5
+                        backgroundColor: '#10b981',
+                        borderRadius: 8
                     },
                     {
                         label: 'Pengeluaran',
                         data: dataPengeluaran,
-                        backgroundColor: '#dc2626',
-                        borderRadius: 5
+                        backgroundColor: '#f43f5e',
+                        borderRadius: 8
                     }
                 ]
             },

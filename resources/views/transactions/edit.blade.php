@@ -1,42 +1,38 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-2xl font-extrabold text-slate-900">
             Edit Transaksi
         </h2>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm rounded-lg p-6">
+    <div class="max-w-2xl">
+        <div class="bg-white rounded-3xl shadow-sm p-7">
 
-                <form action="{{ route('transactions.update', $transaction) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+            <form action="{{ route('transactions.update', $transaction) }}" method="POST" class="space-y-5">
+                @csrf
+                @method('PUT')
 
-                    <div class="mb-4">
-                        <label for="transaction_date" class="block text-sm font-medium text-gray-700">
-                            Tanggal Transaksi
-                        </label>
+                <div>
+                    <x-input-label for="transaction_date" value="Tanggal Transaksi" />
 
-                        <input type="datetime-local"
-                               name="transaction_date"
-                               id="transaction_date"
-                               value="{{ old('transaction_date', $transaction->transaction_date->format('Y-m-d\TH:i')) }}"
-                               required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <input type="datetime-local"
+                           name="transaction_date"
+                           id="transaction_date"
+                           value="{{ old('transaction_date', $transaction->transaction_date->format('Y-m-d\TH:i')) }}"
+                           required
+                           class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
 
-                        @error('transaction_date')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    @error('transaction_date')
+                        <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="type" class="block text-sm font-medium text-gray-700">
-                            Jenis Transaksi
-                        </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <x-input-label for="type" value="Jenis Transaksi" />
 
                         <select name="type" id="type" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
                             <option value="expense"
                                 @selected(old('type', $transaction->type) === 'expense')>
                                 Pengeluaran
@@ -48,17 +44,15 @@
                         </select>
 
                         @error('type')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="mb-4">
-                        <label for="category_id" class="block text-sm font-medium text-gray-700">
-                            Kategori
-                        </label>
+                    <div>
+                        <x-input-label for="category_id" value="Kategori" />
 
                         <select name="category_id" id="category_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
                             <option value="">Tanpa kategori</option>
 
                             @foreach ($categories as $category)
@@ -72,78 +66,67 @@
                         </select>
 
                         @error('category_id')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label for="amount" class="block text-sm font-medium text-gray-700">
-                            Nominal (Rp)
-                        </label>
+                <div>
+                    <x-input-label for="amount" value="Nominal (Rp)" />
 
-                        <input type="number"
-                               name="amount"
-                               id="amount"
-                               min="1"
-                               step="1"
-                               value="{{ old('amount', $transaction->amount) }}"
-                               required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <input type="number"
+                           name="amount"
+                           id="amount"
+                           min="1"
+                           step="1"
+                           value="{{ old('amount', $transaction->amount) }}"
+                           required
+                           class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
 
-                        @error('amount')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    @error('amount')
+                        <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">
-                            Deskripsi
-                        </label>
+                <div>
+                    <x-input-label for="description" value="Deskripsi" />
 
-                        <input type="text"
-                               name="description"
-                               id="description"
-                               value="{{ old('description', $transaction->description) }}"
-                               required
-                               maxlength="255"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <input type="text"
+                           name="description"
+                           id="description"
+                           value="{{ old('description', $transaction->description) }}"
+                           required
+                           maxlength="255"
+                           class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
 
-                        @error('description')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    @error('description')
+                        <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-6">
-                        <label for="merchant" class="block text-sm font-medium text-gray-700">
-                            Tempat / Merchant (opsional)
-                        </label>
+                <div>
+                    <x-input-label for="merchant" value="Tempat / Merchant (opsional)" />
 
-                        <input type="text"
-                               name="merchant"
-                               id="merchant"
-                               value="{{ old('merchant', $transaction->merchant) }}"
-                               maxlength="150"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <input type="text"
+                           name="merchant"
+                           id="merchant"
+                           value="{{ old('merchant', $transaction->merchant) }}"
+                           maxlength="150"
+                           class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 focus:ring-0 bg-slate-50 px-4 py-3 text-sm">
 
-                        @error('merchant')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    @error('merchant')
+                        <p class="text-rose-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="flex gap-3">
-                        <button type="submit"
-                                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                            Update
-                        </button>
+                <div class="flex gap-3 pt-2">
+                    <x-primary-button>Update</x-primary-button>
+                    <a href="{{ route('transactions.index') }}">
+                        <x-secondary-button type="button">Batal</x-secondary-button>
+                    </a>
+                </div>
+            </form>
 
-                        <a href="{{ route('transactions.index') }}"
-                           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                            Batal
-                        </a>
-                    </div>
-                </form>
-
-            </div>
         </div>
     </div>
 

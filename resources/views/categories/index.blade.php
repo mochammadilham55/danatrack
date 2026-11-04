@@ -1,99 +1,66 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="text-2xl font-extrabold text-slate-900">
                 Kategori
             </h2>
 
             <a href="{{ route('categories.create') }}"
-               class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+               class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-bold shadow-lg shadow-indigo-200">
                 + Tambah Kategori
             </a>
         </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-5">
 
-            @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-                <div class="p-6">
-
-                    @if ($categories->isEmpty())
-                        <p class="text-gray-500 text-center py-8">
-                            Belum ada kategori. Silakan tambahkan kategori baru.
-                        </p>
-                    @else
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-gray-100 text-gray-700">
-                                    <tr>
-                                        <th class="px-4 py-3">No</th>
-                                        <th class="px-4 py-3">Nama Kategori</th>
-                                        <th class="px-4 py-3">Jenis</th>
-                                        <th class="px-4 py-3">Warna</th>
-                                        <th class="px-4 py-3">Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($categories as $category)
-                                        <tr class="border-b">
-                                            <td class="px-4 py-3">
-                                                {{ $loop->iteration }}
-                                            </td>
-
-                                            <td class="px-4 py-3 font-medium">
-                                                {{ $category->name }}
-                                            </td>
-
-                                            <td class="px-4 py-3">
-                                                {{ $category->type === 'expense'
-                                                    ? 'Pengeluaran'
-                                                    : 'Pemasukan' }}
-                                            </td>
-
-                                            <td class="px-4 py-3">
-                                                <span class="inline-block w-5 h-5 rounded-full border"
-                                                      style="background-color: {{ $category->color }}">
-                                                </span>
-                                                {{ $category->color }}
-                                            </td>
-
-                                            <td class="px-4 py-3">
-                                                <div class="flex items-center gap-2">
-                                                    <a href="{{ route('categories.edit', $category) }}"
-                                                       class="text-indigo-600 hover:underline">
-                                                        Edit
-                                                    </a>
-
-                                                    <form action="{{ route('categories.destroy', $category) }}"
-                                                          method="POST"
-                                                          onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-
-                                                        <button type="submit"
-                                                                class="text-red-600 hover:underline">
-                                                            Hapus
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
-
-                </div>
+        @if (session('success'))
+            <div class="p-4 bg-emerald-100 text-emerald-800 rounded-2xl text-sm font-medium">
+                {{ session('success') }}
             </div>
-        </div>
+        @endif
+
+        @if ($categories->isEmpty())
+            <div class="bg-white rounded-3xl shadow-sm p-12 text-center text-slate-400">
+                Belum ada kategori. Silakan tambahkan kategori baru.
+            </div>
+        @else
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach ($categories as $category)
+                    <div class="bg-white rounded-3xl shadow-sm p-5 flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-lg font-bold shrink-0"
+                              style="background-color: {{ $category->color }}">
+                            {{ \Illuminate\Support\Str::of($category->name)->substr(0, 1)->upper() }}
+                        </span>
+
+                        <div class="flex-1 overflow-hidden">
+                            <p class="font-bold text-slate-800 truncate">{{ $category->name }}</p>
+                            <p class="text-xs text-slate-400">
+                                {{ $category->type === 'expense' ? 'Pengeluaran' : 'Pemasukan' }}
+                                · {{ $category->color }}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-xs font-bold shrink-0">
+                            <a href="{{ route('categories.edit', $category) }}" class="text-indigo-600 hover:underline">
+                                Edit
+                            </a>
+
+                            <form action="{{ route('categories.destroy', $category) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="text-rose-500 hover:underline">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
     </div>
 </x-app-layout>
