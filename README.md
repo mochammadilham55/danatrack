@@ -1,58 +1,160 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DanaTrack
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web pencatatan keuangan pribadi (pemasukan dan pengeluaran) berbasis Laravel. Antarmuka berbahasa Indonesia, dengan dashboard, kategori, transaksi, laporan dengan ekspor Excel, serta integrasi notifikasi dan approval transaksi lewat Telegram.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Autentikasi pengguna (login, registrasi, lupa password, verifikasi email) menggunakan Laravel Breeze.
+- CRUD kategori transaksi (pemasukan/pengeluaran, dengan warna penanda).
+- CRUD transaksi manual, dengan isolasi data per pengguna.
+- Dashboard: ringkasan pemasukan/pengeluaran/saldo, filter periode, grafik 6 bulan terakhir, kategori pengeluaran terbesar, transaksi terbaru.
+- Laporan: filter rentang tanggal, rekap pengeluaran per kategori, rincian transaksi, dan ekspor ke file Excel (`.xlsx`).
+- Notifikasi Telegram otomatis setiap kali transaksi manual dibuat.
+- Alur approval transaksi: transaksi berstatus `pending` (misalnya dari kanal otomatis) harus disetujui sebelum masuk ke perhitungan dashboard/laporan. Approval bisa dilakukan lewat tombol di aplikasi web maupun tombol inline di Telegram.
+- Integrasi email bank (Google Apps Script): email notifikasi transaksi dari bank dibaca otomatis, dikirim ke aplikasi sebagai transaksi `pending`, lalu diminta persetujuan lewat Telegram.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi yang Dipakai
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3, Laravel 13
+- Blade, Tailwind CSS, Alpine.js (lewat Laravel Breeze)
+- MySQL
+- Chart.js (grafik dashboard)
+- maatwebsite/excel (ekspor laporan ke `.xlsx`)
+- Telegram Bot API (notifikasi dan approval)
+- Google Apps Script (pembaca email notifikasi bank, opsional)
 
-## Learning Laravel
+## Prasyarat
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Pastikan sudah terpasang di komputer Anda:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.3 atau lebih baru, beserta ekstensi `pdo_mysql` dan `zip` (dibutuhkan untuk ekspor Excel).
+- Composer
+- Node.js dan npm
+- MySQL (bisa lewat Laragon, XAMPP, atau instalasi mandiri)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Instalasi
 
-## Agentic Development
+1. Clone atau unduh proyek ini, lalu masuk ke foldernya.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+   ```bash
+   git clone <url-repo-ini> danatrack
+   cd danatrack
+   ```
+
+2. Install dependency PHP.
+
+   ```bash
+   composer install
+   ```
+
+3. Salin file environment, lalu buat `APP_KEY`.
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. Buat database MySQL baru (misalnya bernama `danatrack`), lalu sesuaikan bagian berikut di `.env` dengan kredensial database Anda:
+
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=danatrack
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. Jalankan migrasi database.
+
+   ```bash
+   php artisan migrate
+   ```
+
+6. Install dependency frontend dan build asset.
+
+   ```bash
+   npm install
+   npm run build
+   ```
+
+7. Jalankan server pengembangan.
+
+   ```bash
+   php artisan serve
+   ```
+
+8. Buka `http://127.0.0.1:8000` di browser, lalu daftarkan akun baru lewat halaman registrasi.
+
+Langkah 1–7 di atas juga bisa dijalankan sekaligus lewat:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer setup
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Untuk pengembangan sehari-hari (server, build asset, dan antrean job berjalan bersamaan), gunakan:
 
-## Contributing
+```bash
+composer dev
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Konfigurasi Opsional: Notifikasi Telegram
 
-## Code of Conduct
+Fitur ini membuat aplikasi mengirim pesan Telegram setiap transaksi manual dibuat, dan mengizinkan approval transaksi `pending` lewat tombol Telegram.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Buat bot baru lewat [@BotFather](https://t.me/BotFather) di Telegram untuk mendapatkan token bot.
+2. Kirim pesan apa saja ke bot Anda, lalu buka `https://api.telegram.org/bot<TOKEN>/getUpdates` di browser untuk menemukan `chat.id` Anda.
+3. Isi di `.env`:
 
-## Security Vulnerabilities
+   ```env
+   TELEGRAM_BOT_TOKEN=token_bot_anda
+   TELEGRAM_CHAT_ID=chat_id_anda
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. Bersihkan cache konfigurasi, lalu uji koneksi.
 
-## License
+   ```bash
+   php artisan config:clear
+   php artisan telegram:test
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Jika berhasil, akan ada pesan uji yang masuk ke chat Telegram Anda.
+
+## Konfigurasi Opsional: Impor Otomatis dari Email Bank
+
+Fitur ini membaca email notifikasi transaksi dari bank (lewat Google Apps Script), mengirimkannya ke aplikasi sebagai transaksi `pending`, lalu meminta persetujuan Anda lewat tombol Telegram sebelum masuk ke dashboard/laporan.
+
+Fitur ini butuh aplikasi bisa diakses dari internet (lewat domain publik atau tunnel seperti ngrok untuk pengujian lokal). Langkah lengkapnya, termasuk contoh skrip Google Apps Script, ada di:
+
+- [`docs/telegram-email-integration.md`](docs/telegram-email-integration.md)
+- [`docs/google-apps-script/EmailWatcher.gs`](docs/google-apps-script/EmailWatcher.gs)
+
+Variabel environment yang terkait:
+
+```env
+EMAIL_WEBHOOK_SECRET=
+EMAIL_WEBHOOK_USER_ID=
+TELEGRAM_WEBHOOK_SECRET=
+```
+
+## Menjalankan Test
+
+```bash
+php artisan test
+```
+
+atau
+
+```bash
+composer test
+```
+
+## Referensi Desain
+
+Folder [`contoh halaman/`](contoh%20halaman/) berisi contoh mockup HTML statis untuk beberapa arah desain tampilan (bukan bagian dari aplikasi, murni referensi visual). Tampilan aplikasi yang aktif sekarang mengikuti arah "Desain 2 — Vibrant Modern" dari contoh tersebut.
+
+## Catatan dan Keterbatasan
+
+- Deteksi otomatis transaksi masuk (`type: income`) dari email bank belum diuji dengan contoh email transfer masuk yang sesungguhnya. Lihat catatan TODO di `docs/google-apps-script/EmailWatcher.gs`.
+- Aplikasi ini belum pernah di-deploy ke lingkungan produksi. Catatan kompatibilitas untuk beberapa platform hosting ada di riwayat diskusi proyek; secara umum aplikasi ini cocok untuk hosting yang mendukung PHP/Laravel secara native (misalnya Railway, Render, atau VPS biasa).
+- Jangan pernah menyimpan token Telegram, kredensial database, atau secret lainnya di dalam kode atau commit Git. File `.env` sudah terdaftar di `.gitignore`.
