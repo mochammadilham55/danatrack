@@ -10,7 +10,7 @@ use App\Http\Controllers\Webhooks\TelegramWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Webhook publik (machine-to-machine): otentikasi pakai shared secret
