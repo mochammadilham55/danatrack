@@ -19,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhooks/*',
         ]);
+
+        // Hosting (Railway/Render) menerima HTTPS di edge lalu meneruskan
+        // ke container lewat HTTP biasa. Tanpa ini, Laravel mengira semua
+        // request HTTP sehingga asset/Vite dibuat dengan URL http:// yang
+        // diblokir browser sebagai mixed-content di halaman https://.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
