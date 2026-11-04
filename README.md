@@ -156,5 +156,5 @@ Folder [`contoh halaman/`](contoh%20halaman/) berisi contoh mockup HTML statis u
 ## Catatan dan Keterbatasan
 
 - Deteksi otomatis transaksi masuk (`type: income`) dari email bank belum diuji dengan contoh email transfer masuk yang sesungguhnya. Lihat catatan TODO di `docs/google-apps-script/EmailWatcher.gs`.
-- Aplikasi ini belum pernah di-deploy ke lingkungan produksi. Catatan kompatibilitas untuk beberapa platform hosting ada di riwayat diskusi proyek; secara umum aplikasi ini cocok untuk hosting yang mendukung PHP/Laravel secara native (misalnya Railway, Render, atau VPS biasa).
+- Aplikasi ini belum pernah di-deploy ke lingkungan produksi. Cocok untuk hosting yang mendukung PHP/Laravel secara native (Railway, Render, VPS biasa). Panduan deploy ke Railway ada di [`docs/railway-deployment.md`](docs/railway-deployment.md). **Vercel tidak direkomendasikan** -- tidak ada runtime PHP resmi di sana.
 - Jangan pernah menyimpan token Telegram, kredensial database, atau secret lainnya di dalam kode atau commit Git. File `.env` sudah terdaftar di `.gitignore`.
