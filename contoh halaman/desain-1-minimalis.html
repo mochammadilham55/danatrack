@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DanaTrack — Desain 1: Minimalis Bersih</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .bar { height: 10px; border-radius: 4px 4px 0 0; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- ============ SWITCHER NAVIGASI PREVIEW (bukan bagian desain) ============ -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white text-sm px-4 py-2 flex items-center gap-1 overflow-x-auto">
+  <span class="font-semibold mr-2 shrink-0">Desain 1 · Minimalis:</span>
+  <button data-tombol="login" onclick="tunjuk('login')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Login</button>
+  <button data-tombol="register" onclick="tunjuk('register')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Register</button>
+  <button data-tombol="dashboard" onclick="tunjuk('dashboard')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Dashboard</button>
+  <button data-tombol="transaksi" onclick="tunjuk('transaksi')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Transaksi</button>
+  <button data-tombol="form-transaksi" onclick="tunjuk('form-transaksi')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Form Transaksi</button>
+  <button data-tombol="kategori" onclick="tunjuk('kategori')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Kategori</button>
+  <button data-tombol="form-kategori" onclick="tunjuk('form-kategori')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Form Kategori</button>
+  <button data-tombol="laporan" onclick="tunjuk('laporan')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Laporan</button>
+  <button data-tombol="profil" onclick="tunjuk('profil')" class="px-3 py-1 rounded-md hover:bg-white/10 shrink-0">Profil</button>
+  <a href="index.html" class="ml-auto px-3 py-1 rounded-md bg-white/10 hover:bg-white/20 shrink-0">← Pilihan desain</a>
+</div>
+<div class="h-11"></div>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" data-halaman class="min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white text-2xl font-bold mb-3">D</div>
+      <h1 class="text-2xl font-bold text-gray-900">Masuk ke DanaTrack</h1>
+      <p class="text-gray-500 text-sm mt-1">Kelola keuangan pribadi Anda dengan tenang.</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <form class="space-y-5" onsubmit="return false">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="email" value="ilham@contoh.com" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input type="password" value="********" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2 text-gray-600">
+            <input type="checkbox" checked class="rounded border-gray-300 text-indigo-600">
+            Ingat saya
+          </label>
+          <a href="#" class="text-indigo-600 hover:underline">Lupa password?</a>
+        </div>
+        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg py-2.5 text-sm transition">Masuk</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-6">Belum punya akun? <a href="#" class="text-indigo-600 font-medium hover:underline">Daftar</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGISTER ============ -->
+<section id="register" data-halaman class="hidden min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white text-2xl font-bold mb-3">D</div>
+      <h1 class="text-2xl font-bold text-gray-900">Buat akun DanaTrack</h1>
+      <p class="text-gray-500 text-sm mt-1">Gratis, mulai catat keuangan dalam 1 menit.</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <form class="space-y-5" onsubmit="return false">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+          <input type="text" value="Ilham" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="email" value="ilham@contoh.com" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input type="password" value="********" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password</label>
+          <input type="password" value="********" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2.5 text-sm">
+        </div>
+        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg py-2.5 text-sm transition">Daftar</button>
+      </form>
+      <p class="text-center text-sm text-gray-500 mt-6">Sudah punya akun? <a href="#" class="text-indigo-600 font-medium hover:underline">Masuk</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NAVBAR APLIKASI (dipakai berulang di halaman bawah) ============ -->
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>
+          DanaTrack
+        </div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Dashboard</a>
+          <a class="hover:text-gray-900">Kategori</a>
+          <a class="hover:text-gray-900">Transaksi</a>
+          <a class="hover:text-gray-900">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600">
+        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>
+        Ilham <span class="text-gray-400">▾</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-wrap items-end gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-500 mb-1">Periode</label>
+        <select class="rounded-lg border-gray-300 text-sm px-3 py-2"><option>Bulan Ini</option></select>
+      </div>
+      <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-4 py-2">Terapkan</button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <p class="text-sm text-gray-500">Total Pemasukan</p>
+        <h3 class="text-3xl font-bold text-green-600 mt-2">Rp8.500.000</h3>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <p class="text-sm text-gray-500">Total Pengeluaran</p>
+        <h3 class="text-3xl font-bold text-red-600 mt-2">Rp3.250.000</h3>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <p class="text-sm text-gray-500">Saldo</p>
+        <h3 class="text-3xl font-bold text-indigo-600 mt-2">Rp5.250.000</h3>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-800 mb-4">Grafik 6 Bulan Terakhir</h3>
+        <div class="flex items-end gap-4 h-48">
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:60%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:40%"></div></div>
+            <span class="text-xs text-gray-400">Jun</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:75%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:50%"></div></div>
+            <span class="text-xs text-gray-400">Jul</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:55%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:65%"></div></div>
+            <span class="text-xs text-gray-400">Agu</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:90%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:35%"></div></div>
+            <span class="text-xs text-gray-400">Sep</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:70%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:55%"></div></div>
+            <span class="text-xs text-gray-400">Okt</span>
+          </div>
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end gap-1 h-40"><div class="flex-1 bg-green-400 rounded-t" style="height:85%"></div><div class="flex-1 bg-red-400 rounded-t" style="height:30%"></div></div>
+            <span class="text-xs text-gray-400">Nov</span>
+          </div>
+        </div>
+        <div class="flex gap-4 mt-3 text-xs text-gray-500"><span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>Pemasukan</span><span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>Pengeluaran</span></div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-800 mb-4">Kategori Pengeluaran Terbesar</h3>
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+          <div>
+            <p class="font-medium text-gray-800">Makanan</p>
+            <p class="text-sm text-gray-500">Rp1.200.000</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="p-6 pb-0"><h3 class="font-semibold text-gray-800">Transaksi Terbaru</h3></div>
+      <table class="w-full text-sm text-left mt-4">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase"><tr><th class="px-6 py-3">Tanggal</th><th class="px-6 py-3">Deskripsi</th><th class="px-6 py-3">Kategori</th><th class="px-6 py-3 text-right">Nominal</th></tr></thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr><td class="px-6 py-3 whitespace-nowrap text-gray-500">03/11/2026</td><td class="px-6 py-3">Makan siang</td><td class="px-6 py-3">Makanan</td><td class="px-6 py-3 text-right text-red-600 font-medium">-Rp35.000</td></tr>
+          <tr><td class="px-6 py-3 whitespace-nowrap text-gray-500">02/11/2026</td><td class="px-6 py-3">Gaji bulanan</td><td class="px-6 py-3">Gaji</td><td class="px-6 py-3 text-right text-green-600 font-medium">+Rp8.000.000</td></tr>
+          <tr><td class="px-6 py-3 whitespace-nowrap text-gray-500">01/11/2026</td><td class="px-6 py-3">Isi bensin</td><td class="px-6 py-3">Transportasi</td><td class="px-6 py-3 text-right text-red-600 font-medium">-Rp50.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRANSAKSI LIST ============ -->
+<section id="transaksi" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-gray-900">Dashboard</a><a class="hover:text-gray-900">Kategori</a>
+          <a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Transaksi</a><a class="hover:text-gray-900">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 py-8 space-y-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-bold text-gray-900">Transaksi</h1>
+      <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-4 py-2">+ Tambah Transaksi</button>
+    </div>
+
+    <div class="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl px-4 py-3">Anda memiliki 2 transaksi yang menunggu persetujuan.</div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+          <tr><th class="px-6 py-3">Tanggal</th><th class="px-6 py-3">Deskripsi</th><th class="px-6 py-3">Kategori</th><th class="px-6 py-3">Jenis</th><th class="px-6 py-3 text-right">Nominal</th><th class="px-6 py-3">Status</th><th class="px-6 py-3">Aksi</th></tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr>
+            <td class="px-6 py-3.5 whitespace-nowrap text-gray-500">03/11/2026</td>
+            <td class="px-6 py-3.5"><div class="font-medium text-gray-800">QRIS Bayar</div><div class="text-xs text-gray-400">Indomaret</div></td>
+            <td class="px-6 py-3.5">Belanja</td>
+            <td class="px-6 py-3.5 text-red-600">Pengeluaran</td>
+            <td class="px-6 py-3.5 text-right font-medium">Rp63.500</td>
+            <td class="px-6 py-3.5"><span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">Menunggu</span></td>
+            <td class="px-6 py-3.5"><div class="flex gap-3"><a class="text-green-600 hover:underline">Setujui</a><a class="text-indigo-600 hover:underline">Edit</a><a class="text-red-600 hover:underline">Tolak</a></div></td>
+          </tr>
+          <tr>
+            <td class="px-6 py-3.5 whitespace-nowrap text-gray-500">02/11/2026</td>
+            <td class="px-6 py-3.5"><div class="font-medium text-gray-800">Gaji bulanan</div></td>
+            <td class="px-6 py-3.5">Gaji</td>
+            <td class="px-6 py-3.5 text-green-600">Pemasukan</td>
+            <td class="px-6 py-3.5 text-right font-medium">Rp8.000.000</td>
+            <td class="px-6 py-3.5"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">Disetujui</span></td>
+            <td class="px-6 py-3.5"><div class="flex gap-3"><a class="text-indigo-600 hover:underline">Edit</a><a class="text-red-600 hover:underline">Hapus</a></div></td>
+          </tr>
+          <tr>
+            <td class="px-6 py-3.5 whitespace-nowrap text-gray-500">01/11/2026</td>
+            <td class="px-6 py-3.5"><div class="font-medium text-gray-800">Isi bensin</div><div class="text-xs text-gray-400">Pertamina</div></td>
+            <td class="px-6 py-3.5">Transportasi</td>
+            <td class="px-6 py-3.5 text-red-600">Pengeluaran</td>
+            <td class="px-6 py-3.5 text-right font-medium">Rp50.000</td>
+            <td class="px-6 py-3.5"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">Disetujui</span></td>
+            <td class="px-6 py-3.5"><div class="flex gap-3"><a class="text-indigo-600 hover:underline">Edit</a><a class="text-red-600 hover:underline">Hapus</a></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="px-6 py-4 border-t border-gray-100 flex justify-between items-center text-sm text-gray-500">
+        <span>Menampilkan 1–3 dari 204</span>
+        <div class="flex gap-1"><button class="px-3 py-1 rounded-md border border-gray-200 hover:bg-gray-50">‹</button><button class="px-3 py-1 rounded-md bg-indigo-600 text-white">1</button><button class="px-3 py-1 rounded-md border border-gray-200 hover:bg-gray-50">2</button><button class="px-3 py-1 rounded-md border border-gray-200 hover:bg-gray-50">›</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORM TRANSAKSI ============ -->
+<section id="form-transaksi" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-gray-900">Dashboard</a><a class="hover:text-gray-900">Kategori</a>
+          <a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Transaksi</a><a class="hover:text-gray-900">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-2xl mx-auto px-6 py-8">
+    <h1 class="text-xl font-bold text-gray-900 mb-5">Tambah Transaksi</h1>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <form class="space-y-5" onsubmit="return false">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Transaksi</label>
+          <input type="text" value="03/11/2026 14:30" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Jenis</label>
+            <select class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"><option>Pengeluaran</option><option>Pemasukan</option></select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+            <select class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"><option>Makanan</option></select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (Rp)</label>
+          <input type="text" value="35000" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+          <input type="text" value="Makan siang" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Merchant (opsional)</label>
+          <input type="text" value="Warteg Bu Siti" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm">
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-5 py-2.5">Simpan</button>
+          <button class="bg-gray-100 text-gray-700 text-sm font-medium rounded-lg px-5 py-2.5">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KATEGORI LIST ============ -->
+<section id="kategori" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-gray-900">Dashboard</a><a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Kategori</a>
+          <a class="hover:text-gray-900">Transaksi</a><a class="hover:text-gray-900">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 py-8 space-y-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-bold text-gray-900">Kategori</h1>
+      <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-4 py-2">+ Tambah Kategori</button>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase"><tr><th class="px-6 py-3">Nama</th><th class="px-6 py-3">Jenis</th><th class="px-6 py-3">Warna</th><th class="px-6 py-3">Aksi</th></tr></thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr><td class="px-6 py-3.5 font-medium">Makanan</td><td class="px-6 py-3.5 text-gray-500">Pengeluaran</td><td class="px-6 py-3.5"><span class="inline-block w-4 h-4 rounded-full bg-amber-500 mr-2"></span>#f59e0b</td><td class="px-6 py-3.5"><a class="text-indigo-600 hover:underline">Edit</a> <a class="text-red-600 hover:underline ml-3">Hapus</a></td></tr>
+          <tr><td class="px-6 py-3.5 font-medium">Transportasi</td><td class="px-6 py-3.5 text-gray-500">Pengeluaran</td><td class="px-6 py-3.5"><span class="inline-block w-4 h-4 rounded-full bg-blue-500 mr-2"></span>#3b82f6</td><td class="px-6 py-3.5"><a class="text-indigo-600 hover:underline">Edit</a> <a class="text-red-600 hover:underline ml-3">Hapus</a></td></tr>
+          <tr><td class="px-6 py-3.5 font-medium">Gaji</td><td class="px-6 py-3.5 text-gray-500">Pemasukan</td><td class="px-6 py-3.5"><span class="inline-block w-4 h-4 rounded-full bg-green-500 mr-2"></span>#22c55e</td><td class="px-6 py-3.5"><a class="text-indigo-600 hover:underline">Edit</a> <a class="text-red-600 hover:underline ml-3">Hapus</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORM KATEGORI ============ -->
+<section id="form-kategori" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-gray-900">Dashboard</a><a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Kategori</a>
+          <a class="hover:text-gray-900">Transaksi</a><a class="hover:text-gray-900">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-2xl mx-auto px-6 py-8">
+    <h1 class="text-xl font-bold text-gray-900 mb-5">Tambah Kategori</h1>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <form class="space-y-5" onsubmit="return false">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
+          <input type="text" value="Hiburan" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kategori</label>
+          <select class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"><option>Pengeluaran</option><option>Pemasukan</option></select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Warna Kategori</label>
+          <div class="flex items-center gap-3">
+            <input type="color" value="#8b5cf6" class="h-10 w-16 rounded border-gray-300">
+            <span class="text-sm text-gray-500">#8b5cf6</span>
+          </div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-5 py-2.5">Simpan</button>
+          <button class="bg-gray-100 text-gray-700 text-sm font-medium rounded-lg px-5 py-2.5">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAPORAN ============ -->
+<section id="laporan" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-gray-900">Dashboard</a><a class="hover:text-gray-900">Kategori</a>
+          <a class="hover:text-gray-900">Transaksi</a><a class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Laporan</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
+    <h1 class="text-xl font-bold text-gray-900">Laporan Keuangan</h1>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-wrap items-end gap-4">
+      <div><label class="block text-xs font-medium text-gray-500 mb-1">Dari tanggal</label><input type="text" value="01/11/2026" class="rounded-lg border-gray-300 text-sm px-3 py-2"></div>
+      <div><label class="block text-xs font-medium text-gray-500 mb-1">Sampai tanggal</label><input type="text" value="30/11/2026" class="rounded-lg border-gray-300 text-sm px-3 py-2"></div>
+      <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-4 py-2">Tampilkan</button>
+      <button class="text-gray-500 text-sm px-2">Reset</button>
+      <button class="ml-auto bg-green-600 text-white text-sm font-medium rounded-lg px-4 py-2">Unduh Excel</button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"><p class="text-sm text-gray-500">Total Pemasukan</p><h3 class="text-2xl font-bold text-green-600 mt-2">Rp8.500.000</h3></div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"><p class="text-sm text-gray-500">Total Pengeluaran</p><h3 class="text-2xl font-bold text-red-600 mt-2">Rp3.250.000</h3></div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"><p class="text-sm text-gray-500">Saldo Bersih</p><h3 class="text-2xl font-bold text-indigo-600 mt-2">Rp5.250.000</h3></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="p-6 pb-4"><h3 class="font-semibold text-gray-800">Rekap Pengeluaran per Kategori</h3></div>
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase"><tr><th class="px-6 py-3">Kategori</th><th class="px-6 py-3 text-right">Total</th></tr></thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr><td class="px-6 py-3">Makanan</td><td class="px-6 py-3 text-right text-red-600 font-medium">Rp1.200.000</td></tr>
+          <tr><td class="px-6 py-3">Transportasi</td><td class="px-6 py-3 text-right text-red-600 font-medium">Rp650.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section id="profil" data-halaman class="hidden">
+  <nav class="bg-white border-b border-gray-100 sticky top-11 z-10">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 font-bold text-indigo-600 text-lg"><div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm">D</div>DanaTrack</div>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-500"><a class="hover:text-gray-900">Dashboard</a><a class="hover:text-gray-900">Kategori</a><a class="hover:text-gray-900">Transaksi</a><a class="hover:text-gray-900">Laporan</a></div>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">IL</div>Ilham ▾</div>
+    </div>
+  </nav>
+
+  <div class="max-w-2xl mx-auto px-6 py-8 space-y-6">
+    <h1 class="text-xl font-bold text-gray-900">Profil</h1>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h3 class="font-semibold text-gray-800">Informasi Profil</h3>
+      <p class="text-sm text-gray-500 mt-1 mb-4">Perbarui nama dan alamat email akun Anda.</p>
+      <div class="space-y-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Nama</label><input type="text" value="Ilham" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" value="ilham@contoh.com" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"></div>
+        <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-5 py-2.5">Simpan</button>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h3 class="font-semibold text-gray-800">Ubah Password</h3>
+      <p class="text-sm text-gray-500 mt-1 mb-4">Gunakan password yang panjang dan acak.</p>
+      <div class="space-y-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Password Saat Ini</label><input type="password" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label><input type="password" class="w-full rounded-lg border-gray-300 px-3 py-2.5 text-sm"></div>
+        <button class="bg-indigo-600 text-white text-sm font-medium rounded-lg px-5 py-2.5">Simpan</button>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-red-100 p-6">
+      <h3 class="font-semibold text-gray-800">Hapus Akun</h3>
+      <p class="text-sm text-gray-500 mt-1 mb-4">Semua data akan terhapus permanen.</p>
+      <button class="bg-red-600 text-white text-sm font-medium rounded-lg px-5 py-2.5">Hapus Akun</button>
+    </div>
+  </div>
+</section>
+
+<script>
+function tunjuk(id) {
+  document.querySelectorAll('[data-halaman]').forEach(el => el.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('[data-tombol]').forEach(btn => btn.classList.toggle('bg-white/20', btn.dataset.tombol === id));
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DanaTrack — Desain 2: Vibrant Modern</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+  .grad-hijau { background: linear-gradient(135deg, #10b981, #0d9488); }
+  .grad-merah { background: linear-gradient(135deg, #f43f5e, #fb923c); }
+  .grad-ungu { background: linear-gradient(135deg, #6366f1, #a855f7); }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<div class="fixed top-0 left-0 right-0 z-50 bg-slate-900 text-white text-sm px-4 py-2 flex items-center gap-1 overflow-x-auto">
+  <span class="font-semibold mr-2 shrink-0">Desain 2 · Vibrant:</span>
+  <button data-tombol="login" onclick="tunjuk('login')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Login</button>
+  <button data-tombol="register" onclick="tunjuk('register')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Register</button>
+  <button data-tombol="dashboard" onclick="tunjuk('dashboard')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Dashboard</button>
+  <button data-tombol="transaksi" onclick="tunjuk('transaksi')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Transaksi</button>
+  <button data-tombol="form-transaksi" onclick="tunjuk('form-transaksi')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Form Transaksi</button>
+  <button data-tombol="kategori" onclick="tunjuk('kategori')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Kategori</button>
+  <button data-tombol="form-kategori" onclick="tunjuk('form-kategori')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Form Kategori</button>
+  <button data-tombol="laporan" onclick="tunjuk('laporan')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Laporan</button>
+  <button data-tombol="profil" onclick="tunjuk('profil')" class="px-3 py-1 rounded-full hover:bg-white/10 shrink-0">Profil</button>
+  <a href="index.html" class="ml-auto px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 shrink-0">← Pilihan desain</a>
+</div>
+<div class="h-11"></div>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" data-halaman class="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-indigo-50 via-slate-50 to-rose-50">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl grad-ungu text-white text-2xl font-extrabold mb-3 shadow-lg shadow-indigo-200">D</div>
+      <h1 class="text-3xl font-extrabold text-slate-900">Halo lagi 👋</h1>
+      <p class="text-slate-500 text-sm mt-1">Masuk untuk lanjut pantau uangmu.</p>
+    </div>
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200 p-8">
+      <form class="space-y-5" onsubmit="return false">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+          <input type="email" value="ilham@contoh.com" class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 px-4 py-3 text-sm bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+          <input type="password" value="********" class="w-full rounded-2xl border-2 border-slate-100 focus:border-indigo-400 px-4 py-3 text-sm bg-slate-50">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2 text-slate-600"><input type="checkbox" checked class="rounded text-indigo-600">Ingat saya</label>
+          <a href="#" class="text-indigo-600 font-semibold hover:underline">Lupa password?</a>
+        </div>
+        <button class="w-full grad-ungu text-white font-bold rounded-2xl py-3.5 text-sm shadow-lg shadow-indigo-200">Masuk</button>
+      </form>
+      <p class="text-center text-sm text-slate-500 mt-6">Belum punya akun? <a href="#" class="text-indigo-600 font-bold hover:underline">Daftar gratis</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGISTER ============ -->
+<section id="register" data-halaman class="hidden min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-indigo-50 via-slate-50 to-rose-50">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl grad-ungu text-white text-2xl font-extrabold mb-3 shadow-lg shadow-indigo-200">D</div>
+      <h1 class="text-3xl font-extrabold text-slate-900">Mulai sekarang 🚀</h1>
+      <p class="text-slate-500 text-sm mt-1">Catat tiap rupiah, mulai hari ini.</p>
+    </div>
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200 p-8">
+      <form class="space-y-5" onsubmit="return false">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Nama</label><input type="text" value="Ilham" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Email</label><input type="email" value="ilham@contoh.com" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Password</label><input type="password" value="********" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Konfirmasi Password</label><input type="password" value="********" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <button class="w-full grad-ungu text-white font-bold rounded-2xl py-3.5 text-sm shadow-lg shadow-indigo-200">Daftar</button>
+      </form>
+      <p class="text-center text-sm text-slate-500 mt-6">Sudah punya akun? <a href="#" class="text-indigo-600 font-bold hover:underline">Masuk</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+    <div class="p-4 flex items-center gap-3 border-t border-white/10">
+      <div class="w-9 h-9 rounded-full grad-ungu flex items-center justify-center text-xs font-bold">IL</div>
+      <div><p class="text-sm font-semibold">Ilham</p><p class="text-xs text-slate-400">Lihat profil</p></div>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-6 lg:p-8 space-y-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div><h1 class="text-2xl font-extrabold text-slate-900">Halo, Ilham 👋</h1><p class="text-slate-500 text-sm">Berikut ringkasan keuanganmu bulan ini.</p></div>
+      <select class="rounded-full border-2 border-slate-200 text-sm px-4 py-2 font-medium bg-white"><option>Bulan Ini</option></select>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="grad-hijau rounded-3xl p-6 text-white shadow-lg shadow-emerald-200"><p class="text-sm opacity-90">Total Pemasukan</p><h3 class="text-3xl font-extrabold mt-2">Rp8.500.000</h3></div>
+      <div class="grad-merah rounded-3xl p-6 text-white shadow-lg shadow-rose-200"><p class="text-sm opacity-90">Total Pengeluaran</p><h3 class="text-3xl font-extrabold mt-2">Rp3.250.000</h3></div>
+      <div class="grad-ungu rounded-3xl p-6 text-white shadow-lg shadow-indigo-200"><p class="text-sm opacity-90">Saldo</p><h3 class="text-3xl font-extrabold mt-2">Rp5.250.000</h3></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm p-6">
+        <h3 class="font-bold text-slate-800 mb-4">Grafik 6 Bulan Terakhir</h3>
+        <div class="flex items-end gap-4 h-48">
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:60%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:40%"></div></div><span class="text-xs text-slate-400 font-medium">Jun</span></div>
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:75%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:50%"></div></div><span class="text-xs text-slate-400 font-medium">Jul</span></div>
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:55%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:65%"></div></div><span class="text-xs text-slate-400 font-medium">Agu</span></div>
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:90%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:35%"></div></div><span class="text-xs text-slate-400 font-medium">Sep</span></div>
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:70%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:55%"></div></div><span class="text-xs text-slate-400 font-medium">Okt</span></div>
+          <div class="flex-1 flex flex-col items-center gap-1"><div class="w-full flex items-end gap-1.5 h-40"><div class="flex-1 rounded-t-xl grad-hijau" style="height:85%"></div><div class="flex-1 rounded-t-xl grad-merah" style="height:30%"></div></div><span class="text-xs text-slate-400 font-medium">Nov</span></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-3xl shadow-sm p-6">
+        <h3 class="font-bold text-slate-800 mb-4">Kategori Terbesar</h3>
+        <div class="flex items-center gap-3 bg-amber-50 rounded-2xl p-4">
+          <span class="w-10 h-10 rounded-xl bg-amber-400 flex items-center justify-center text-white">🍔</span>
+          <div><p class="font-bold text-slate-800">Makanan</p><p class="text-sm text-slate-500">Rp1.200.000</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm overflow-hidden">
+      <div class="p-6 pb-2"><h3 class="font-bold text-slate-800">Transaksi Terbaru</h3></div>
+      <div class="divide-y divide-slate-50">
+        <div class="flex items-center justify-between px-6 py-4">
+          <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">🍔</span><div><p class="font-semibold text-slate-800 text-sm">Makan siang</p><p class="text-xs text-slate-400">03 Nov · Makanan</p></div></div>
+          <span class="font-bold text-rose-500 text-sm">-Rp35.000</span>
+        </div>
+        <div class="flex items-center justify-between px-6 py-4">
+          <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">💰</span><div><p class="font-semibold text-slate-800 text-sm">Gaji bulanan</p><p class="text-xs text-slate-400">02 Nov · Gaji</p></div></div>
+          <span class="font-bold text-emerald-600 text-sm">+Rp8.000.000</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ TRANSAKSI ============ -->
+<section id="transaksi" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 space-y-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold text-slate-900">Transaksi</h1>
+      <button class="grad-ungu text-white text-sm font-bold rounded-full px-5 py-2.5 shadow-lg shadow-indigo-200">+ Tambah Transaksi</button>
+    </div>
+    <div class="bg-amber-100 text-amber-800 text-sm rounded-2xl px-5 py-3 font-medium">🔔 Anda memiliki 2 transaksi yang menunggu persetujuan.</div>
+
+    <div class="bg-white rounded-3xl shadow-sm divide-y divide-slate-50 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-3"><span class="w-11 h-11 rounded-2xl bg-sky-100 flex items-center justify-center">🛒</span>
+          <div><p class="font-semibold text-slate-800 text-sm">QRIS Bayar · Indomaret</p><p class="text-xs text-slate-400">03 Nov 2026 · Belanja</p></div></div>
+        <div class="flex items-center gap-4">
+          <span class="font-bold text-rose-500 text-sm">Rp63.500</span>
+          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">Menunggu</span>
+          <div class="flex gap-2 text-xs font-bold"><button class="text-emerald-600">Setujui</button><button class="text-indigo-600">Edit</button><button class="text-rose-500">Tolak</button></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-3"><span class="w-11 h-11 rounded-2xl bg-emerald-100 flex items-center justify-center">💰</span>
+          <div><p class="font-semibold text-slate-800 text-sm">Gaji bulanan</p><p class="text-xs text-slate-400">02 Nov 2026 · Gaji</p></div></div>
+        <div class="flex items-center gap-4">
+          <span class="font-bold text-emerald-600 text-sm">Rp8.000.000</span>
+          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Disetujui</span>
+          <div class="flex gap-2 text-xs font-bold"><button class="text-indigo-600">Edit</button><button class="text-rose-500">Hapus</button></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-3"><span class="w-11 h-11 rounded-2xl bg-sky-100 flex items-center justify-center">⛽</span>
+          <div><p class="font-semibold text-slate-800 text-sm">Isi bensin · Pertamina</p><p class="text-xs text-slate-400">01 Nov 2026 · Transportasi</p></div></div>
+        <div class="flex items-center gap-4">
+          <span class="font-bold text-rose-500 text-sm">Rp50.000</span>
+          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Disetujui</span>
+          <div class="flex gap-2 text-xs font-bold"><button class="text-indigo-600">Edit</button><button class="text-rose-500">Hapus</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center gap-2"><button class="w-9 h-9 rounded-full bg-white shadow text-sm">‹</button><button class="w-9 h-9 rounded-full grad-ungu text-white text-sm font-bold">1</button><button class="w-9 h-9 rounded-full bg-white shadow text-sm">2</button><button class="w-9 h-9 rounded-full bg-white shadow text-sm">›</button></div>
+  </main>
+</section>
+
+<!-- ============ FORM TRANSAKSI ============ -->
+<section id="form-transaksi" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 max-w-2xl">
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-5">Tambah Transaksi</h1>
+    <div class="bg-white rounded-3xl shadow-sm p-7">
+      <form class="space-y-5" onsubmit="return false">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Transaksi</label><input type="text" value="03/11/2026 14:30" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-semibold text-slate-700 mb-1">Jenis</label><select class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"><option>Pengeluaran</option><option>Pemasukan</option></select></div>
+          <div><label class="block text-sm font-semibold text-slate-700 mb-1">Kategori</label><select class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"><option>Makanan</option></select></div>
+        </div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Nominal (Rp)</label><input type="text" value="35000" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi</label><input type="text" value="Makan siang" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Merchant (opsional)</label><input type="text" value="Warteg Bu Siti" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div class="flex gap-3 pt-2">
+          <button class="grad-ungu text-white text-sm font-bold rounded-full px-6 py-3 shadow-lg shadow-indigo-200">Simpan</button>
+          <button class="bg-slate-100 text-slate-600 text-sm font-bold rounded-full px-6 py-3">Batal</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</section>
+
+<!-- ============ KATEGORI ============ -->
+<section id="kategori" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 space-y-5">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold text-slate-900">Kategori</h1>
+      <button class="grad-ungu text-white text-sm font-bold rounded-full px-5 py-2.5 shadow-lg shadow-indigo-200">+ Tambah Kategori</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white rounded-3xl shadow-sm p-5 flex items-center gap-4">
+        <span class="w-12 h-12 rounded-2xl bg-amber-400 flex items-center justify-center text-white text-xl">🍔</span>
+        <div class="flex-1"><p class="font-bold text-slate-800">Makanan</p><p class="text-xs text-slate-400">Pengeluaran</p></div>
+        <div class="flex gap-2 text-xs font-bold"><button class="text-indigo-600">Edit</button><button class="text-rose-500">Hapus</button></div>
+      </div>
+      <div class="bg-white rounded-3xl shadow-sm p-5 flex items-center gap-4">
+        <span class="w-12 h-12 rounded-2xl bg-sky-400 flex items-center justify-center text-white text-xl">🚗</span>
+        <div class="flex-1"><p class="font-bold text-slate-800">Transportasi</p><p class="text-xs text-slate-400">Pengeluaran</p></div>
+        <div class="flex gap-2 text-xs font-bold"><button class="text-indigo-600">Edit</button><button class="text-rose-500">Hapus</button></div>
+      </div>
+      <div class="bg-white rounded-3xl shadow-sm p-5 flex items-center gap-4">
+        <span class="w-12 h-12 rounded-2xl bg-emerald-400 flex items-center justify-center text-white text-xl">💰</span>
+        <div class="flex-1"><p class="font-bold text-slate-800">Gaji</p><p class="text-xs text-slate-400">Pemasukan</p></div>
+        <div class="flex gap-2 text-xs font-bold"><button class="text-indigo-600">Edit</button><button class="text-rose-500">Hapus</button></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ FORM KATEGORI ============ -->
+<section id="form-kategori" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 max-w-2xl">
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-5">Tambah Kategori</h1>
+    <div class="bg-white rounded-3xl shadow-sm p-7">
+      <form class="space-y-5" onsubmit="return false">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Nama Kategori</label><input type="text" value="Hiburan" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Jenis Kategori</label><select class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"><option>Pengeluaran</option><option>Pemasukan</option></select></div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Warna Kategori</label>
+          <div class="flex gap-2">
+            <button class="w-10 h-10 rounded-2xl bg-amber-400 ring-2 ring-offset-2 ring-amber-400"></button>
+            <button class="w-10 h-10 rounded-2xl bg-sky-400"></button>
+            <button class="w-10 h-10 rounded-2xl bg-emerald-400"></button>
+            <button class="w-10 h-10 rounded-2xl bg-violet-400"></button>
+            <button class="w-10 h-10 rounded-2xl bg-rose-400"></button>
+          </div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button class="grad-ungu text-white text-sm font-bold rounded-full px-6 py-3 shadow-lg shadow-indigo-200">Simpan</button>
+          <button class="bg-slate-100 text-slate-600 text-sm font-bold rounded-full px-6 py-3">Batal</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</section>
+
+<!-- ============ LAPORAN ============ -->
+<section id="laporan" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/10 text-white">📈 Laporan</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 space-y-6">
+    <h1 class="text-2xl font-extrabold text-slate-900">Laporan Keuangan</h1>
+    <div class="bg-white rounded-3xl shadow-sm p-5 flex flex-wrap items-end gap-4">
+      <div><label class="block text-xs font-semibold text-slate-500 mb-1">Dari tanggal</label><input type="text" value="01/11/2026" class="rounded-2xl border-2 border-slate-100 text-sm px-4 py-2.5 bg-slate-50"></div>
+      <div><label class="block text-xs font-semibold text-slate-500 mb-1">Sampai tanggal</label><input type="text" value="30/11/2026" class="rounded-2xl border-2 border-slate-100 text-sm px-4 py-2.5 bg-slate-50"></div>
+      <button class="grad-ungu text-white text-sm font-bold rounded-full px-5 py-2.5">Tampilkan</button>
+      <button class="text-slate-500 text-sm font-semibold px-2">Reset</button>
+      <button class="ml-auto grad-hijau text-white text-sm font-bold rounded-full px-5 py-2.5">⬇ Unduh Excel</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="grad-hijau rounded-3xl p-6 text-white shadow-lg shadow-emerald-200"><p class="text-sm opacity-90">Total Pemasukan</p><h3 class="text-2xl font-extrabold mt-2">Rp8.500.000</h3></div>
+      <div class="grad-merah rounded-3xl p-6 text-white shadow-lg shadow-rose-200"><p class="text-sm opacity-90">Total Pengeluaran</p><h3 class="text-2xl font-extrabold mt-2">Rp3.250.000</h3></div>
+      <div class="grad-ungu rounded-3xl p-6 text-white shadow-lg shadow-indigo-200"><p class="text-sm opacity-90">Saldo Bersih</p><h3 class="text-2xl font-extrabold mt-2">Rp5.250.000</h3></div>
+    </div>
+    <div class="bg-white rounded-3xl shadow-sm p-6">
+      <h3 class="font-bold text-slate-800 mb-4">Rekap Pengeluaran per Kategori</h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm font-medium"><span class="w-3 h-3 rounded-full bg-amber-400"></span>Makanan</span><span class="font-bold text-rose-500 text-sm">Rp1.200.000</span></div>
+        <div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm font-medium"><span class="w-3 h-3 rounded-full bg-sky-400"></span>Transportasi</span><span class="font-bold text-rose-500 text-sm">Rp650.000</span></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section id="profil" data-halaman class="hidden flex">
+  <aside class="w-64 bg-slate-900 min-h-screen sticky top-11 text-white flex-col hidden lg:flex" style="height:calc(100vh - 44px)">
+    <div class="p-6 flex items-center gap-2 font-extrabold text-lg"><div class="w-9 h-9 rounded-xl grad-ungu flex items-center justify-center">D</div>DanaTrack</div>
+    <nav class="flex-1 px-4 space-y-1 text-sm font-medium">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📊 Dashboard</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">🏷️ Kategori</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">💸 Transaksi</a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:bg-white/5">📈 Laporan</a>
+    </nav>
+    <div class="p-4 flex items-center gap-3 border-t border-white/10">
+      <div class="w-9 h-9 rounded-full grad-ungu flex items-center justify-center text-xs font-bold">IL</div>
+      <div><p class="text-sm font-semibold">Ilham</p></div>
+    </div>
+  </aside>
+  <main class="flex-1 p-6 lg:p-8 max-w-2xl space-y-6">
+    <h1 class="text-2xl font-extrabold text-slate-900">Profil</h1>
+    <div class="bg-white rounded-3xl shadow-sm p-7">
+      <h3 class="font-bold text-slate-800">Informasi Profil</h3>
+      <p class="text-sm text-slate-500 mt-1 mb-4">Perbarui nama dan email akunmu.</p>
+      <div class="space-y-4">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Nama</label><input type="text" value="Ilham" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Email</label><input type="email" value="ilham@contoh.com" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <button class="grad-ungu text-white text-sm font-bold rounded-full px-6 py-3">Simpan</button>
+      </div>
+    </div>
+    <div class="bg-white rounded-3xl shadow-sm p-7">
+      <h3 class="font-bold text-slate-800">Ubah Password</h3>
+      <p class="text-sm text-slate-500 mt-1 mb-4">Pakai password yang kuat dan unik.</p>
+      <div class="space-y-4">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Password Saat Ini</label><input type="password" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Password Baru</label><input type="password" class="w-full rounded-2xl border-2 border-slate-100 px-4 py-3 text-sm bg-slate-50"></div>
+        <button class="grad-ungu text-white text-sm font-bold rounded-full px-6 py-3">Simpan</button>
+      </div>
+    </div>
+    <div class="bg-rose-50 rounded-3xl p-7 border-2 border-rose-100">
+      <h3 class="font-bold text-slate-800">Hapus Akun</h3>
+      <p class="text-sm text-slate-500 mt-1 mb-4">Tindakan ini permanen dan tidak bisa dibatalkan.</p>
+      <button class="bg-rose-500 text-white text-sm font-bold rounded-full px-6 py-3">Hapus Akun</button>
+    </div>
+  </main>
+</section>
+
+<script>
+function tunjuk(id) {
+  document.querySelectorAll('[data-halaman]').forEach(el => el.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('[data-tombol]').forEach(btn => btn.classList.toggle('bg-white/20', btn.dataset.tombol === id));
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
