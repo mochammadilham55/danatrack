@@ -1,8 +1,10 @@
 FROM php:8.3-cli-bookworm
 
 RUN apt-get update && apt-get install -y \
-        git curl zip unzip libzip-dev \
-    && docker-php-ext-install pdo_mysql pdo_pgsql zip \
+        git curl zip unzip libzip-dev libpq-dev \
+        libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install pdo_mysql pdo_pgsql zip gd \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*

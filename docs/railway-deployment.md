@@ -1,9 +1,20 @@
 # Deploy DanaTrack ke Railway
 
 Panduan ini untuk deploy pertama kali. Railway mendukung Laravel secara
-native lewat Nixpacks (deteksi otomatis `composer.json` + `artisan`),
-jadi **tidak perlu ubah kode apa pun** -- beda dari kasus Vercel yang
-sempat dibahas sebelumnya.
+native lewat builder otomatisnya (Railpack/Nixpacks, deteksi otomatis
+`composer.json` + `artisan`), jadi **tidak perlu ubah kode apa pun** --
+beda dari kasus Vercel yang sempat dibahas sebelumnya.
+
+**Catatan dari percobaan nyata:** builder otomatis Railway (Railpack)
+sempat gagal build dengan error `phpoffice/phpspreadsheet requires
+ext-gd ... it is missing from your system` -- ekstensi `gd` (dibutuhkan
+`maatwebsite/excel` untuk ekspor laporan) tidak otomatis ter-install.
+Kalau Anda mengalami error serupa, solusi paling pasti: di Settings
+service -> **Build** -> ganti **Builder** dari `Railpack` ke
+`Dockerfile`. Proyek ini sudah punya `Dockerfile` di root (awalnya
+dibuat untuk panduan Render, tapi generic dan ikut mengandung ekstensi
+`gd`, `zip`, `pdo_mysql`, `pdo_pgsql`) -- Railway otomatis memakainya
+begitu builder diganti, tidak perlu menulis apa pun lagi.
 
 Repo proyek ini sudah ada di GitHub:
 `https://github.com/mochammadilham55/danatrack` -- jadi langkah
